@@ -654,7 +654,7 @@ export default function RERAForm() {
             <Card>
               <CardHeader className="py-3">
                 <CardTitle className="text-base flex items-center justify-between">
-                  <span>Live Preview</span>
+                  <span>Live Preview (50% scale)</span>
                   <span className="text-xs font-normal text-muted-foreground">
                     PDF: 1.2m width | QR: 22.5cm
                   </span>
@@ -665,7 +665,9 @@ export default function RERAForm() {
                   className="overflow-auto border rounded-md"
                   style={{ maxHeight: "calc(100vh - 180px)" }}
                 >
-                  <BoardPreview ref={boardRef} data={formData} />
+                  <div style={{ transform: "scale(0.5)", transformOrigin: "top left", width: "400px" }}>
+                    <BoardPreview ref={boardRef} data={formData} />
+                  </div>
                 </div>
               </CardContent>
             </Card>
