@@ -666,7 +666,7 @@ export default function RERAForm() {
             </Accordion>
           </div>
 
-          <div className="lg:sticky lg:top-24 lg:self-start order-first lg:order-last">
+          <div className="lg:sticky lg:top-24 lg:self-start">
             <Card>
               <CardHeader className="py-3">
                 <CardTitle className="text-base flex items-center justify-between gap-2 flex-wrap">
