@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { Download, FileImage, RotateCcw, Users } from "lucide-react";
+import { Download, FileImage, RotateCcw, Users, CheckCircle, PlusCircle } from "lucide-react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -22,6 +22,13 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { apiRequest, queryClient } from "@/lib/queryClient";
@@ -37,6 +44,7 @@ export default function RERAForm() {
   const boardRef = useRef<HTMLDivElement>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [showDownloadModal, setShowDownloadModal] = useState(false);
+  const [showInstructionsModal, setShowInstructionsModal] = useState(false);
   const [pendingDownloadType, setPendingDownloadType] = useState<"PNG" | "PDF">("PNG");
 
   const { data: usageStats } = useQuery<{ totalGenerations: number }>({
@@ -181,6 +189,7 @@ export default function RERAForm() {
         title: "Download Complete",
         description: "Board saved as high-resolution PNG image.",
       });
+      setShowInstructionsModal(true);
     } catch (error) {
       toast({
         title: "Download Failed",
@@ -228,6 +237,7 @@ export default function RERAForm() {
         title: "Download Complete",
         description: "Board saved as PDF document (1.2m width).",
       });
+      setShowInstructionsModal(true);
     } catch (error) {
       toast({
         title: "Download Failed",
@@ -237,6 +247,12 @@ export default function RERAForm() {
     } finally {
       setIsGenerating(false);
     }
+  };
+
+  const handleGenerateNew = () => {
+    setShowInstructionsModal(false);
+    handleReset();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleDownloadWithUserId = (userId: string) => {
@@ -650,27 +666,28 @@ export default function RERAForm() {
             </Accordion>
           </div>
 
-          <div className="lg:sticky lg:top-24 lg:self-start">
+          <div className="lg:sticky lg:top-24 lg:self-start order-first lg:order-last">
             <Card>
               <CardHeader className="py-3">
-                <CardTitle className="text-base flex items-center justify-between">
+                <CardTitle className="text-base flex items-center justify-between gap-2 flex-wrap">
                   <span>Live Preview</span>
                   <span className="text-xs font-normal text-muted-foreground">
-                    PDF: 1.2m width | QR: 22.5cm
+                    65% scale | PDF: 1.2m width
                   </span>
                 </CardTitle>
               </CardHeader>
-              <CardContent className="p-3 pt-0">
+              <CardContent className="p-2 sm:p-3 pt-0">
                 <div 
                   className="overflow-auto border rounded-md"
-                  style={{ maxHeight: "calc(100vh - 180px)" }}
+                  style={{ maxHeight: "calc(100vh - 200px)" }}
                 >
                   <div style={{ 
-                    width: "640px",
+                    width: "520px",
+                    maxWidth: "100%",
                     overflow: "hidden"
                   }}>
                     <div style={{ 
-                      transform: "scale(0.8)", 
+                      transform: "scale(0.65)", 
                       transformOrigin: "top left",
                     }}>
                       <BoardPreview ref={boardRef} data={formData} />
@@ -700,6 +717,81 @@ export default function RERAForm() {
         onDownload={handleDownloadWithUserId}
         downloadType={pendingDownloadType}
       />
+
+      <Dialog open={showInstructionsModal} onOpenChange={setShowInstructionsModal}>
+        <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto">
+          <DialogHeader className="text-center pb-2">
+            <div className="flex justify-center mb-3">
+              <div className="w-12 h-12 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
+                <CheckCircle className="w-6 h-6 text-green-600 dark:text-green-400" />
+              </div>
+            </div>
+            <DialogTitle className="text-xl font-semibold">
+              Download Complete!
+            </DialogTitle>
+            <DialogDescription className="text-sm">
+              Your RERA Information Board has been downloaded successfully.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="space-y-4 mt-4">
+            <h3 className="font-semibold text-base text-foreground">
+              Banner Specifications & Requirements:
+            </h3>
+            
+            <div className="space-y-3 text-sm">
+              <div className="p-3 bg-muted/50 rounded-md">
+                <p className="font-medium text-foreground mb-1">Dimensions of the Banner must be:</p>
+                <ul className="list-disc list-inside text-muted-foreground space-y-0.5 ml-2">
+                  <li>Minimum Width: <span className="font-medium text-foreground">1.20 Meters</span></li>
+                  <li>Minimum Height: <span className="font-medium text-foreground">2.00 Meters</span></li>
+                </ul>
+              </div>
+              
+              <div className="p-3 bg-muted/50 rounded-md">
+                <p className="font-medium text-foreground mb-1">Material:</p>
+                <p className="text-muted-foreground ml-2">
+                  Must be <span className="font-medium text-foreground">Waterproof</span> (Flex, Board, Hoarding, or Digital Display)
+                </p>
+              </div>
+              
+              <div className="p-3 bg-muted/50 rounded-md">
+                <p className="font-medium text-foreground mb-1">Background Color:</p>
+                <p className="text-muted-foreground ml-2">
+                  <span className="font-medium text-foreground">White</span> or <span className="font-medium text-foreground">Yellow</span>
+                </p>
+              </div>
+              
+              <div className="p-3 bg-muted/50 rounded-md">
+                <p className="font-medium text-foreground mb-1">Placement:</p>
+                <ul className="list-disc list-inside text-muted-foreground space-y-0.5 ml-2">
+                  <li>Must be placed at the <span className="font-medium text-foreground">Main Entrance</span> or visible from the <span className="font-medium text-foreground">Main Road</span></li>
+                  <li>Height from Ground: <span className="font-medium text-foreground">Between 1.50 Meters and 2.00 Meters</span></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-2 mt-6">
+            <Button 
+              onClick={handleGenerateNew}
+              className="w-full gap-2"
+              data-testid="button-generate-new"
+            >
+              <PlusCircle className="w-4 h-4" />
+              Generate New Banner
+            </Button>
+            <Button 
+              variant="outline"
+              onClick={() => setShowInstructionsModal(false)}
+              className="w-full"
+              data-testid="button-close-instructions"
+            >
+              Close
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
