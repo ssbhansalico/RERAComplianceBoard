@@ -48,8 +48,9 @@ const BoardPreview = forwardRef<HTMLDivElement, BoardPreviewProps>(({ data }, re
   return (
     <div
       ref={ref}
-      className="w-full border-4 border-gray-800 text-black overflow-hidden"
+      className="border-4 border-gray-800 text-black overflow-hidden"
       style={{
+        width: "800px",
         backgroundColor: bgColor,
         fontFamily: "'Noto Sans Gujarati', 'Noto Sans', sans-serif",
         fontSize: "14px",
@@ -123,23 +124,21 @@ const BoardPreview = forwardRef<HTMLDivElement, BoardPreviewProps>(({ data }, re
             </div>
           </div>
 
-          <div className="w-[200px] flex-shrink-0 flex flex-col items-center justify-start">
-            <div className="text-center w-full mb-2 border-2 border-gray-500 p-1.5 bg-white/50">
-              <p className="text-[11px] font-bold leading-tight">ગુજરાત રેરાની અધિકૃત વેબ સાઈટ:</p>
-              <p className="text-[10px] font-bold leading-tight" style={{ color: "#DC2626" }}>
+          <div className="flex-shrink-0 flex flex-col items-center justify-start" style={{ width: "12.5%" }}>
+            <div className="text-center w-full mb-1 border border-gray-500 p-1 bg-white/50">
+              <p className="text-[9px] font-bold leading-tight">ગુજરાત રેરાની અધિકૃત વેબ સાઈટ:</p>
+              <p className="text-[8px] font-bold leading-tight" style={{ color: "#DC2626" }}>
                 https://gujrera.gujarat.gov.in
               </p>
             </div>
-            <div className="text-center mb-2">
-              <p className="text-[11px] font-bold leading-tight">વેબ સાઈટ પરથી પ્રોજેક્ટ</p>
-              <p className="text-[11px] leading-tight">સર્ટિફિકેટ માહિતી</p>
-              <p className="text-[11px] leading-tight">મેળવવા QR Code</p>
+            <div className="text-center mb-1">
+              <p className="text-[8px] font-bold leading-tight">વેબ સાઈટ પરથી પ્રોજેક્ટ</p>
+              <p className="text-[8px] leading-tight">સર્ટિફિકેટ માહિતી</p>
+              <p className="text-[8px] leading-tight">મેળવવા QR Code</p>
             </div>
             <div
-              className="qr-code-container bg-white overflow-hidden"
+              className="qr-code-container bg-white overflow-hidden aspect-square w-full"
               style={{
-                width: "150px",
-                height: "150px",
                 border: "none",
                 padding: 0,
                 margin: 0,
@@ -159,12 +158,12 @@ const BoardPreview = forwardRef<HTMLDivElement, BoardPreviewProps>(({ data }, re
                   }}
                 />
               ) : (
-                <div className="w-full h-full flex items-center justify-center border-2 border-dashed border-gray-400">
-                  <span className="text-[10px] text-gray-500 text-center">QR Code<br/>Upload</span>
+                <div className="w-full h-full flex items-center justify-center border border-dashed border-gray-400">
+                  <span className="text-[8px] text-gray-500 text-center">QR Code<br/>Upload</span>
                 </div>
               )}
             </div>
-            <p className="text-[10px] mt-1 font-medium text-gray-600">15cm x 15cm in output</p>
+            <p className="text-[7px] mt-0.5 font-medium text-gray-600">15cm x 15cm</p>
           </div>
         </div>
 

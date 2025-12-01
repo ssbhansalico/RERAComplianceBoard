@@ -77,7 +77,12 @@ export default function AuthModal({ isOpen, onAuthenticated }: AuthModalProps) {
 
   return (
     <Dialog open={isOpen} modal>
-      <DialogContent className="sm:max-w-md" onPointerDownOutside={(e) => e.preventDefault()}>
+      <DialogContent 
+        className="sm:max-w-md [&>button]:hidden" 
+        onPointerDownOutside={(e) => e.preventDefault()}
+        onEscapeKeyDown={(e) => e.preventDefault()}
+        onInteractOutside={(e) => e.preventDefault()}
+      >
         <DialogHeader className="text-center">
           <div className="flex justify-center mb-4">
             <img 

@@ -50,6 +50,12 @@ export async function registerRoutes(
   app.post("/api/generations", async (req, res) => {
     try {
       const validatedData = insertGenerationSchema.parse(req.body);
+      
+      const user = await storage.getAppUser(validatedData.userId);
+      if (!user) {
+        return res.status(401).json({ error: "Unauthorized - user not found" });
+      }
+      
       const generation = await storage.createGeneration(validatedData);
       return res.status(201).json(generation);
     } catch (error) {
