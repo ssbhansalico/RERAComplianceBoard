@@ -6,6 +6,32 @@ This is a web application for generating RERA (Real Estate Regulatory Authority)
 
 The application is built as a single-page form with live preview functionality, enabling real estate developers and promoters to create compliant project information boards that must be displayed at construction sites.
 
+**Developed by BNPS and Associates LLP** - www.bnpsca.com
+
+## Recent Changes (December 2025)
+
+### Authentication & User Tracking
+- Added user authentication with name, email, and mobile number required before using the tool
+- Authentication modal cannot be dismissed until user registers/logs in
+- User data stored in PostgreSQL database (app_users table)
+- Sessions persisted via localStorage
+
+### Generation Tracking
+- All board generations (PNG/PDF downloads) are tracked in database (generations table)
+- Usage count displayed in header badge
+- Server validates user exists before accepting generation records
+
+### BNPS Branding
+- Primary color: #185888 (HSL: 205 63% 31%)
+- Fonts: Montserrat (headings), Poppins (body)
+- BNPS logo in header and footer
+- Disclaimer text on form header and board footer
+
+### QR Code Sizing
+- Fixed board width of 800px for consistent output
+- QR code container is 12.5% of board width
+- This ensures exactly 15cm (150mm) QR code in 1.2m (1200mm) PDF output
+
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
