@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { Download, FileImage, RotateCcw, Users } from "lucide-react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
@@ -30,34 +30,14 @@ import QRCodeUpload from "./QRCodeUpload";
 import BlockTable, { type BlockEntry } from "./BlockTable";
 import BackgroundToggle from "./BackgroundToggle";
 import BoardPreview, { type BoardData } from "./BoardPreview";
-import AuthModal from "./AuthModal";
-
-interface AppUser {
-  id: string;
-  name: string;
-  email: string;
-  mobile: string;
-}
+import DownloadModal from "./DownloadModal";
 
 export default function RERAForm() {
   const { toast } = useToast();
   const boardRef = useRef<HTMLDivElement>(null);
   const [isGenerating, setIsGenerating] = useState(false);
-  const [currentUser, setCurrentUser] = useState<AppUser | null>(null);
-  const [showAuthModal, setShowAuthModal] = useState(true);
-
-  useEffect(() => {
-    const savedUser = localStorage.getItem("rera_user");
-    if (savedUser) {
-      try {
-        const user = JSON.parse(savedUser);
-        setCurrentUser(user);
-        setShowAuthModal(false);
-      } catch {
-        localStorage.removeItem("rera_user");
-      }
-    }
-  }, []);
+  const [showDownloadModal, setShowDownloadModal] = useState(false);
+  const [pendingDownloadType, setPendingDownloadType] = useState<"PNG" | "PDF">("PNG");
 
   const { data: usageStats } = useQuery<{ totalGenerations: number }>({
     queryKey: ["/api/stats/usage"],
@@ -144,14 +124,13 @@ export default function RERAForm() {
     }
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("rera_user");
-    setCurrentUser(null);
-    setShowAuthModal(true);
+  const handleDownloadClick = (type: "PNG" | "PDF") => {
+    setPendingDownloadType(type);
+    setShowDownloadModal(true);
   };
 
-  const downloadAsPNG = async () => {
-    if (!boardRef.current || !currentUser) return;
+  const downloadAsPNG = async (userId: string) => {
+    if (!boardRef.current) return;
     setIsGenerating(true);
 
     try {
@@ -167,7 +146,7 @@ export default function RERAForm() {
       link.click();
 
       saveGenerationMutation.mutate({
-        userId: currentUser.id,
+        userId: userId,
         boardData: formData,
         downloadType: "PNG",
       });
@@ -187,8 +166,8 @@ export default function RERAForm() {
     }
   };
 
-  const downloadAsPDF = async () => {
-    if (!boardRef.current || !currentUser) return;
+  const downloadAsPDF = async (userId: string) => {
+    if (!boardRef.current) return;
     setIsGenerating(true);
 
     try {
@@ -217,7 +196,7 @@ export default function RERAForm() {
       pdf.save(`RERA_Board_${formData.reraRegistrationNumber || "draft"}.pdf`);
 
       saveGenerationMutation.mutate({
-        userId: currentUser.id,
+        userId: userId,
         boardData: formData,
         downloadType: "PDF",
       });
@@ -237,30 +216,19 @@ export default function RERAForm() {
     }
   };
 
-  const handleAuthenticated = (user: AppUser) => {
-    setCurrentUser(user);
-    setShowAuthModal(false);
+  const handleDownloadWithUserId = (userId: string) => {
+    if (pendingDownloadType === "PNG") {
+      downloadAsPNG(userId);
+    } else {
+      downloadAsPDF(userId);
+    }
   };
-
-  if (!currentUser) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <AuthModal isOpen={true} onAuthenticated={handleAuthenticated} />
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-background">
-      
       <header className="border-b bg-card sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-3">
           <div className="flex items-center gap-4 mb-2">
-            <img 
-              src="https://bnpsca.com/public/assets/upload/images/original/686662b76f81b-Screenshot-250.png" 
-              alt="BNPS and Associates LLP" 
-              className="h-10 object-contain"
-            />
             <div className="flex-1">
               <h1 className="text-xl font-semibold text-foreground" style={{ fontFamily: "var(--font-heading)" }}>
                 Gujarat RERA Information Board Generator
@@ -283,15 +251,7 @@ export default function RERAForm() {
             Verification of the final output against GujRERA Order No. 112 is the sole responsibility of the user.
           </p>
           
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-            {currentUser && (
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <span>Logged in as: <strong className="text-foreground">{currentUser.name}</strong></span>
-                <Button variant="ghost" size="sm" onClick={handleLogout} className="h-auto py-1 px-2 text-xs">
-                  Logout
-                </Button>
-              </div>
-            )}
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-end gap-2">
             <div className="flex gap-2 flex-wrap sm:ml-auto">
               <Button
                 variant="outline"
@@ -306,8 +266,8 @@ export default function RERAForm() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={downloadAsPNG}
-                disabled={isGenerating || !currentUser}
+                onClick={() => handleDownloadClick("PNG")}
+                disabled={isGenerating}
                 className="gap-1"
                 data-testid="button-download-png"
               >
@@ -316,8 +276,8 @@ export default function RERAForm() {
               </Button>
               <Button
                 size="sm"
-                onClick={downloadAsPDF}
-                disabled={isGenerating || !currentUser}
+                onClick={() => handleDownloadClick("PDF")}
+                disabled={isGenerating}
                 className="gap-1"
                 data-testid="button-download-pdf"
               >
@@ -580,7 +540,7 @@ export default function RERAForm() {
                       data-testid="input-bank-account"
                     />
                     <p className="text-xs text-muted-foreground">
-                      Display format: ***********{formData.bankAccountNumber.slice(-4) || "XXXX"}
+                      Only the last 4 digits will be displayed on the board for security
                     </p>
                   </div>
                 </AccordionContent>
@@ -588,37 +548,35 @@ export default function RERAForm() {
 
               <AccordionItem value="loan" className="border rounded-md px-4">
                 <AccordionTrigger className="text-sm font-medium py-3">
-                  5. Loan Information (Optional) / લોન માહિતી
+                  5. Loan Information / લોન માહિતી
                 </AccordionTrigger>
                 <AccordionContent className="space-y-4 pb-4">
                   <div className="space-y-2">
                     <Label className="text-sm font-medium">Does the project have a loan?</Label>
-                    <p className="text-xs text-muted-foreground" lang="gu" style={{ fontFamily: "'Noto Sans Gujarati', sans-serif" }}>
-                      શું પ્રોજેક્ટ પાસે લોન છે?
-                    </p>
                     <RadioGroup
                       value={formData.hasLoan ? "yes" : "no"}
                       onValueChange={(val) => updateField("hasLoan", val === "yes")}
                       className="flex gap-4"
                     >
                       <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="yes" id="loan-yes" data-testid="radio-loan-yes" />
-                        <Label htmlFor="loan-yes" className="font-normal">Yes / હા</Label>
+                        <RadioGroupItem value="yes" id="loan-yes" />
+                        <Label htmlFor="loan-yes">Yes</Label>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="no" id="loan-no" data-testid="radio-loan-no" />
-                        <Label htmlFor="loan-no" className="font-normal">No / ના</Label>
+                        <RadioGroupItem value="no" id="loan-no" />
+                        <Label htmlFor="loan-no">No</Label>
                       </div>
                     </RadioGroup>
                   </div>
 
-                  {formData.hasLoan ? (
-                    <div className="space-y-4 pt-2 border-t">
+                  {formData.hasLoan && (
+                    <>
                       <div className="space-y-1.5">
                         <BilingualLabel
-                          english="Loan Provider Bank / Financial Institution Name"
-                          gujarati="પ્રોજેક્ટ લોન આપનાર બેંક / નાણા સંસ્થાનું નામ"
+                          english="Loan Bank / Financial Institution Name"
+                          gujarati="લોન બેંક / નાણા સંસ્થાનું નામ"
                           htmlFor="loanBankName"
+                          required
                         />
                         <Input
                           id="loanBankName"
@@ -633,23 +591,25 @@ export default function RERAForm() {
                         <div className="space-y-1.5">
                           <BilingualLabel
                             english="Loan Amount"
-                            gujarati="પ્રોજેક્ટ લોનની રકમ"
+                            gujarati="લોનની રકમ"
                             htmlFor="loanAmount"
+                            required
                           />
                           <Input
                             id="loanAmount"
                             value={formData.loanAmount}
                             onChange={(e) => updateField("loanAmount", e.target.value)}
-                            placeholder="e.g., 5,00,00,000"
+                            placeholder="e.g., 10,00,00,000"
                             data-testid="input-loan-amount"
                           />
                         </div>
 
                         <div className="space-y-1.5">
                           <BilingualLabel
-                            english="Loan Taken Date"
-                            gujarati="પ્રોજેક્ટ લોન લીધા તારીખ"
+                            english="Loan Date"
+                            gujarati="લોન લીધા તારીખ"
                             htmlFor="loanDate"
+                            required
                           />
                           <Input
                             id="loanDate"
@@ -660,14 +620,7 @@ export default function RERAForm() {
                           />
                         </div>
                       </div>
-                    </div>
-                  ) : (
-                    <div className="bg-muted/50 rounded-md p-3 text-sm text-muted-foreground">
-                      <p>
-                        Since the project has no loan, <strong>"Not Applicable"</strong> will be displayed
-                        in the loan section of the board.
-                      </p>
-                    </div>
+                    </>
                   )}
                 </AccordionContent>
               </AccordionItem>
@@ -677,16 +630,21 @@ export default function RERAForm() {
           <div className="lg:sticky lg:top-24 lg:self-start">
             <Card>
               <CardHeader className="py-3">
-                <CardTitle className="text-sm font-medium flex items-center justify-between gap-2">
-                  Live Preview
+                <CardTitle className="text-base flex items-center justify-between">
+                  <span>Live Preview</span>
                   <span className="text-xs font-normal text-muted-foreground">
-                    Real-time board preview
+                    PDF: 1.2m width | QR: 22.5cm
                   </span>
                 </CardTitle>
               </CardHeader>
-              <CardContent className="p-3">
-                <div className="border rounded overflow-auto max-h-[70vh]">
-                  <BoardPreview ref={boardRef} data={formData} />
+              <CardContent className="p-3 pt-0">
+                <div 
+                  className="overflow-auto border rounded-md"
+                  style={{ maxHeight: "calc(100vh - 180px)" }}
+                >
+                  <div className="origin-top-left" style={{ transform: "scale(0.5)", transformOrigin: "top left", width: "200%" }}>
+                    <BoardPreview ref={boardRef} data={formData} />
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -694,28 +652,12 @@ export default function RERAForm() {
         </div>
       </main>
 
-      <footer className="border-t bg-card mt-8">
-        <div className="max-w-7xl mx-auto px-4 py-4">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-2 text-sm text-muted-foreground">
-            <div className="flex items-center gap-2">
-              <img 
-                src="https://bnpsca.com/public/assets/upload/images/original/686662b76f81b-Screenshot-250.png" 
-                alt="BNPS and Associates LLP" 
-                className="h-6 object-contain"
-              />
-              <span>BNPS and Associates LLP</span>
-            </div>
-            <a 
-              href="https://www.bnpsca.com" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-primary hover:underline"
-            >
-              www.bnpsca.com
-            </a>
-          </div>
-        </div>
-      </footer>
+      <DownloadModal
+        isOpen={showDownloadModal}
+        onClose={() => setShowDownloadModal(false)}
+        onDownload={handleDownloadWithUserId}
+        downloadType={pendingDownloadType}
+      />
     </div>
   );
 }

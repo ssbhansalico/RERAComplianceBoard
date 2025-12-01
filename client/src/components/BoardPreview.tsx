@@ -124,11 +124,14 @@ const BoardPreview = forwardRef<HTMLDivElement, BoardPreviewProps>(({ data }, re
             </div>
           </div>
 
-          <div className="flex-shrink-0 flex flex-col items-center justify-start" style={{ width: "12.5%" }}>
+          <div className="flex-shrink-0 flex flex-col items-center justify-start" style={{ width: "18.75%" }}>
             <div className="text-center w-full mb-1 border border-gray-500 p-1 bg-white/50">
               <p className="text-[9px] font-bold leading-tight">ગુજરાત રેરાની અધિકૃત વેબ સાઈટ:</p>
               <p className="text-[8px] font-bold leading-tight" style={{ color: "#DC2626" }}>
-                https://gujrera.gujarat.gov.in
+                https://gujrera.
+              </p>
+              <p className="text-[8px] font-bold leading-tight" style={{ color: "#DC2626" }}>
+                gujarat.gov.in
               </p>
             </div>
             <div className="text-center mb-1">
@@ -163,7 +166,7 @@ const BoardPreview = forwardRef<HTMLDivElement, BoardPreviewProps>(({ data }, re
                 </div>
               )}
             </div>
-            <p className="text-[7px] mt-0.5 font-medium text-gray-600">15cm x 15cm</p>
+            <p className="text-[7px] mt-0.5 font-medium text-gray-600">22.5cm x 22.5cm</p>
           </div>
         </div>
 

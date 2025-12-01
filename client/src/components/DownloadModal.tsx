@@ -5,14 +5,16 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { useMutation } from "@tanstack/react-query";
-import { apiRequest } from "@/lib/queryClient";
+import { apiRequest, queryClient } from "@/lib/queryClient";
 
-interface AuthModalProps {
+interface DownloadModalProps {
   isOpen: boolean;
-  onAuthenticated: (user: { id: string; name: string; email: string; mobile: string }) => void;
+  onClose: () => void;
+  onDownload: (userId: string) => void;
+  downloadType: "PNG" | "PDF";
 }
 
-export default function AuthModal({ isOpen, onAuthenticated }: AuthModalProps) {
+export default function DownloadModal({ isOpen, onClose, onDownload, downloadType }: DownloadModalProps) {
   const { toast } = useToast();
   const [formData, setFormData] = useState({
     name: "",
@@ -27,18 +29,18 @@ export default function AuthModal({ isOpen, onAuthenticated }: AuthModalProps) {
       return response.json();
     },
     onSuccess: (data) => {
-      localStorage.setItem("rera_user", JSON.stringify(data.user));
+      queryClient.invalidateQueries({ queryKey: ["/api/stats/usage"] });
       toast({
-        title: data.isExisting ? "Welcome back!" : "Registration successful",
-        description: data.isExisting 
-          ? `Logged in as ${data.user.name}` 
-          : "You can now use the RERA Board Generator.",
+        title: "Download starting...",
+        description: `Your ${downloadType} is being generated.`,
       });
-      onAuthenticated(data.user);
+      onDownload(data.user.id);
+      onClose();
+      setFormData({ name: "", email: "", mobile: "" });
     },
     onError: () => {
       toast({
-        title: "Registration failed",
+        title: "Failed to process",
         description: "Please check your details and try again.",
         variant: "destructive",
       });
@@ -75,81 +77,88 @@ export default function AuthModal({ isOpen, onAuthenticated }: AuthModalProps) {
     }
   };
 
+  const handleClose = () => {
+    onClose();
+    setFormData({ name: "", email: "", mobile: "" });
+    setErrors({});
+  };
+
   return (
-    <Dialog open={isOpen} modal>
-      <DialogContent 
-        className="sm:max-w-md [&>button]:hidden" 
-        onPointerDownOutside={(e) => e.preventDefault()}
-        onEscapeKeyDown={(e) => e.preventDefault()}
-        onInteractOutside={(e) => e.preventDefault()}
-      >
+    <Dialog open={isOpen} onOpenChange={(open) => !open && handleClose()}>
+      <DialogContent className="sm:max-w-md">
         <DialogHeader className="text-center">
-          <div className="flex justify-center mb-4">
-            <img 
-              src="https://bnpsca.com/public/assets/upload/images/original/686662b76f81b-Screenshot-250.png" 
-              alt="BNPS and Associates LLP" 
-              className="h-16 object-contain"
-            />
-          </div>
           <DialogTitle className="text-xl font-semibold" style={{ fontFamily: "var(--font-heading)" }}>
-            Welcome to RERA Board Generator
+            Download {downloadType}
           </DialogTitle>
           <DialogDescription className="text-sm text-muted-foreground">
-            Please provide your details to continue using this tool
+            Please provide your details to download the board
           </DialogDescription>
         </DialogHeader>
         
         <form onSubmit={handleSubmit} className="space-y-4 mt-4">
           <div className="space-y-2">
-            <Label htmlFor="auth-name">Full Name *</Label>
+            <Label htmlFor="download-name">Full Name *</Label>
             <Input
-              id="auth-name"
+              id="download-name"
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               placeholder="Enter your full name"
-              data-testid="input-auth-name"
+              data-testid="input-download-name"
             />
             {errors.name && <p className="text-sm text-destructive">{errors.name}</p>}
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="auth-email">Email Address *</Label>
+            <Label htmlFor="download-email">Email Address *</Label>
             <Input
-              id="auth-email"
+              id="download-email"
               type="email"
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               placeholder="email@example.com"
-              data-testid="input-auth-email"
+              data-testid="input-download-email"
             />
             {errors.email && <p className="text-sm text-destructive">{errors.email}</p>}
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="auth-mobile">Mobile Number *</Label>
+            <Label htmlFor="download-mobile">Mobile Number *</Label>
             <Input
-              id="auth-mobile"
+              id="download-mobile"
               type="tel"
               value={formData.mobile}
               onChange={(e) => setFormData({ ...formData, mobile: e.target.value })}
               placeholder="10-digit mobile number"
-              data-testid="input-auth-mobile"
+              data-testid="input-download-mobile"
             />
             {errors.mobile && <p className="text-sm text-destructive">{errors.mobile}</p>}
           </div>
           
-          <Button 
-            type="submit" 
-            className="w-full"
-            disabled={registerMutation.isPending}
-            data-testid="button-auth-submit"
-          >
-            {registerMutation.isPending ? "Please wait..." : "Continue to Generator"}
-          </Button>
+          <div className="flex gap-2">
+            <Button 
+              type="button"
+              variant="outline"
+              className="flex-1"
+              onClick={handleClose}
+            >
+              Cancel
+            </Button>
+            <Button 
+              type="submit" 
+              className="flex-1"
+              disabled={registerMutation.isPending}
+              data-testid="button-download-submit"
+            >
+              {registerMutation.isPending ? "Processing..." : `Download ${downloadType}`}
+            </Button>
+          </div>
           
-          <p className="text-xs text-center text-muted-foreground">
-            By continuing, you agree that your information will be stored for usage tracking purposes.
-          </p>
+          <div className="pt-2 border-t">
+            <p className="text-xs text-center text-muted-foreground">
+              <strong>Disclaimer:</strong> The data submitted is not stored permanently. 
+              Contact details are collected for research purposes only and will not be shared with third parties.
+            </p>
+          </div>
         </form>
       </DialogContent>
     </Dialog>
