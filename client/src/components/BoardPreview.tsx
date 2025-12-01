@@ -123,31 +123,28 @@ const BoardPreview = forwardRef<HTMLDivElement, BoardPreviewProps>(({ data }, re
             </div>
           </div>
 
-          <div className="w-[130px] flex-shrink-0 flex flex-col items-center justify-start">
+          <div className="w-[200px] flex-shrink-0 flex flex-col items-center justify-start">
             <div className="text-center w-full mb-2 border-2 border-gray-500 p-1.5 bg-white/50">
-              <p className="text-[10px] font-bold leading-tight">ગુજરાત રેરાની અધિકૃત વેબ સાઈટ:</p>
-              <p className="text-[9px] font-bold leading-tight" style={{ color: "#DC2626" }}>
-                https://gujrera.
-              </p>
-              <p className="text-[9px] font-bold leading-tight" style={{ color: "#DC2626" }}>
-                gujarat.gov.in
+              <p className="text-[11px] font-bold leading-tight">ગુજરાત રેરાની અધિકૃત વેબ સાઈટ:</p>
+              <p className="text-[10px] font-bold leading-tight" style={{ color: "#DC2626" }}>
+                https://gujrera.gujarat.gov.in
               </p>
             </div>
-            <div className="text-center mb-1">
-              <p className="text-[10px] font-bold leading-tight">વેબ સાઈટ પરથી પ્રોજેક્ટ</p>
-              <p className="text-[10px] leading-tight">સર્ટિફિકેટ માહિતી</p>
-              <p className="text-[10px] leading-tight">મેળવવા QR Code</p>
+            <div className="text-center mb-2">
+              <p className="text-[11px] font-bold leading-tight">વેબ સાઈટ પરથી પ્રોજેક્ટ</p>
+              <p className="text-[11px] leading-tight">સર્ટિફિકેટ માહિતી</p>
+              <p className="text-[11px] leading-tight">મેળવવા QR Code</p>
             </div>
             <div
-              className="w-[80px] h-[80px] border-2 border-gray-600 bg-white flex items-center justify-center overflow-hidden"
+              className="w-[180px] h-[180px] border-2 border-gray-600 bg-white flex items-center justify-center overflow-hidden"
             >
               {data.qrCodeImage ? (
                 <img src={data.qrCodeImage} alt="QR Code" className="w-full h-full object-contain" />
               ) : (
-                <span className="text-[9px] text-gray-500 text-center p-1">QR Code<br/>Upload</span>
+                <span className="text-[10px] text-gray-500 text-center p-2">QR Code<br/>Upload</span>
               )}
             </div>
-            <p className="text-[9px] mt-0.5">Min. 15cm x 15cm</p>
+            <p className="text-[10px] mt-1 font-medium">Min. 15cm x 15cm</p>
           </div>
         </div>
 
@@ -276,6 +273,12 @@ const BoardPreview = forwardRef<HTMLDivElement, BoardPreviewProps>(({ data }, re
               આ પ્રોજેક્ટની પ્રગતી, બુકીંગ કરાવેલ યુનીટની વિગતો, બુકીંગ પેટે આપેલા નાણા, કે અન્ય કોઇ બાબતે જે તે એલોટીને ફરીયાદ હોય તો, ગુજરાત રેરાની અધિક્રુત વેબ સાઇટ ઉપર જઇને, નિયત ફી ભરીને, નિયત મુસદા અનુસાર વિગતો/પુરાવા રજૂ કરીને ફરીયાદ દાખલ કરી શકશે.
             </li>
           </ol>
+        </div>
+
+        <div className="mt-4 pt-2 border-t border-gray-400 text-center">
+          <p className="text-[10px] text-gray-600 italic">
+            Generated without liability by tool developed by BNPS and Associates LLP
+          </p>
         </div>
       </div>
     </div>
