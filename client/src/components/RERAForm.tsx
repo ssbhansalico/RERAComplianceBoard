@@ -1,5 +1,5 @@
-import { useState, useRef } from "react";
-import { Download, FileImage, RotateCcw } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { Download, FileImage, RotateCcw, Users } from "lucide-react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Badge } from "@/components/ui/badge";
 import {
   Select,
   SelectContent,
@@ -22,16 +23,46 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { useToast } from "@/hooks/use-toast";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { apiRequest, queryClient } from "@/lib/queryClient";
 import BilingualLabel from "./BilingualLabel";
 import QRCodeUpload from "./QRCodeUpload";
 import BlockTable, { type BlockEntry } from "./BlockTable";
 import BackgroundToggle from "./BackgroundToggle";
 import BoardPreview, { type BoardData } from "./BoardPreview";
+import AuthModal from "./AuthModal";
+
+interface AppUser {
+  id: string;
+  name: string;
+  email: string;
+  mobile: string;
+}
 
 export default function RERAForm() {
   const { toast } = useToast();
   const boardRef = useRef<HTMLDivElement>(null);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [currentUser, setCurrentUser] = useState<AppUser | null>(null);
+  const [showAuthModal, setShowAuthModal] = useState(true);
+
+  useEffect(() => {
+    const savedUser = localStorage.getItem("rera_user");
+    if (savedUser) {
+      try {
+        const user = JSON.parse(savedUser);
+        setCurrentUser(user);
+        setShowAuthModal(false);
+      } catch {
+        localStorage.removeItem("rera_user");
+      }
+    }
+  }, []);
+
+  const { data: usageStats } = useQuery<{ totalGenerations: number }>({
+    queryKey: ["/api/stats/usage"],
+    refetchInterval: 30000,
+  });
 
   const [formData, setFormData] = useState<BoardData>({
     reraRegistrationNumber: "",
@@ -53,6 +84,16 @@ export default function RERAForm() {
     loanDate: "",
     qrCodeImage: null,
     backgroundColor: "yellow",
+  });
+
+  const saveGenerationMutation = useMutation({
+    mutationFn: async (data: { userId: string; boardData: BoardData; downloadType: string }) => {
+      const response = await apiRequest("POST", "/api/generations", data);
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/stats/usage"] });
+    },
   });
 
   const updateField = <K extends keyof BoardData>(field: K, value: BoardData[K]) => {
@@ -89,8 +130,14 @@ export default function RERAForm() {
     }
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("rera_user");
+    setCurrentUser(null);
+    setShowAuthModal(true);
+  };
+
   const downloadAsPNG = async () => {
-    if (!boardRef.current) return;
+    if (!boardRef.current || !currentUser) return;
     setIsGenerating(true);
 
     try {
@@ -104,6 +151,12 @@ export default function RERAForm() {
       link.download = `RERA_Board_${formData.reraRegistrationNumber || "draft"}.png`;
       link.href = canvas.toDataURL("image/png");
       link.click();
+
+      saveGenerationMutation.mutate({
+        userId: currentUser.id,
+        boardData: formData,
+        downloadType: "PNG",
+      });
 
       toast({
         title: "Download Complete",
@@ -121,7 +174,7 @@ export default function RERAForm() {
   };
 
   const downloadAsPDF = async () => {
-    if (!boardRef.current) return;
+    if (!boardRef.current || !currentUser) return;
     setIsGenerating(true);
 
     try {
@@ -149,6 +202,12 @@ export default function RERAForm() {
       pdf.addImage(imgData, "PNG", 0, 0, pdfWidthMM, pdfHeightMM);
       pdf.save(`RERA_Board_${formData.reraRegistrationNumber || "draft"}.pdf`);
 
+      saveGenerationMutation.mutate({
+        userId: currentUser.id,
+        boardData: formData,
+        downloadType: "PDF",
+      });
+
       toast({
         title: "Download Complete",
         description: "Board saved as PDF document (1.2m width).",
@@ -164,20 +223,55 @@ export default function RERAForm() {
     }
   };
 
+  const handleAuthenticated = (user: AppUser) => {
+    setCurrentUser(user);
+    setShowAuthModal(false);
+  };
+
   return (
     <div className="min-h-screen bg-background">
+      <AuthModal isOpen={showAuthModal} onAuthenticated={handleAuthenticated} />
+      
       <header className="border-b bg-card sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 py-4">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-            <div>
-              <h1 className="text-xl font-semibold text-foreground">
+        <div className="max-w-7xl mx-auto px-4 py-3">
+          <div className="flex items-center gap-4 mb-2">
+            <img 
+              src="https://bnpsca.com/public/assets/upload/images/original/686662b76f81b-Screenshot-250.png" 
+              alt="BNPS and Associates LLP" 
+              className="h-10 object-contain"
+            />
+            <div className="flex-1">
+              <h1 className="text-xl font-semibold text-foreground" style={{ fontFamily: "var(--font-heading)" }}>
                 Gujarat RERA Information Board Generator
               </h1>
               <p className="text-sm text-muted-foreground" lang="gu" style={{ fontFamily: "'Noto Sans Gujarati', sans-serif" }}>
                 ગુજરાત રેરા માહિતી બોર્ડ જનરેટર - હુકમ ક્ર.૧૧૨
               </p>
             </div>
-            <div className="flex gap-2 flex-wrap">
+            {usageStats && (
+              <Badge variant="secondary" className="gap-1 hidden sm:flex">
+                <Users className="h-3 w-3" />
+                {usageStats.totalGenerations} boards generated
+              </Badge>
+            )}
+          </div>
+          
+          <p className="text-xs text-muted-foreground mb-3 leading-relaxed">
+            Developed by BNPS and Associates LLP. This tool is provided for convenience and assistance only. 
+            We do not assume any liability for errors, omissions, or non-compliance. 
+            Verification of the final output against GujRERA Order No. 112 is the sole responsibility of the user.
+          </p>
+          
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+            {currentUser && (
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <span>Logged in as: <strong className="text-foreground">{currentUser.name}</strong></span>
+                <Button variant="ghost" size="sm" onClick={handleLogout} className="h-auto py-1 px-2 text-xs">
+                  Logout
+                </Button>
+              </div>
+            )}
+            <div className="flex gap-2 flex-wrap sm:ml-auto">
               <Button
                 variant="outline"
                 size="sm"
@@ -192,7 +286,7 @@ export default function RERAForm() {
                 variant="outline"
                 size="sm"
                 onClick={downloadAsPNG}
-                disabled={isGenerating}
+                disabled={isGenerating || !currentUser}
                 className="gap-1"
                 data-testid="button-download-png"
               >
@@ -202,7 +296,7 @@ export default function RERAForm() {
               <Button
                 size="sm"
                 onClick={downloadAsPDF}
-                disabled={isGenerating}
+                disabled={isGenerating || !currentUser}
                 className="gap-1"
                 data-testid="button-download-pdf"
               >
@@ -550,10 +644,7 @@ export default function RERAForm() {
                     <div className="bg-muted/50 rounded-md p-3 text-sm text-muted-foreground">
                       <p>
                         Since the project has no loan, <strong>"Not Applicable"</strong> will be displayed
-                        for Bank Name, Amount, and Sanctioned Date.
-                      </p>
-                      <p className="mt-1" lang="gu" style={{ fontFamily: "'Noto Sans Gujarati', sans-serif" }}>
-                        પ્રોજેક્ટ પાસે લોન ન હોવાથી, બેંકનું નામ, રકમ અને મંજૂરીની તારીખ માટે "Not Applicable" દર્શાવવામાં આવશે.
+                        in the loan section of the board.
                       </p>
                     </div>
                   )}
@@ -564,35 +655,44 @@ export default function RERAForm() {
 
           <div className="lg:sticky lg:top-24 lg:self-start">
             <Card>
-              <CardHeader className="pb-3">
+              <CardHeader className="py-3">
                 <CardTitle className="text-sm font-medium flex items-center justify-between gap-2">
-                  <span>Live Preview / પ્રીવ્યુ</span>
+                  Live Preview
                   <span className="text-xs font-normal text-muted-foreground">
-                    Scroll to see full board
+                    Real-time board preview
                   </span>
                 </CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="border rounded-md overflow-auto max-h-[600px]">
+              <CardContent className="p-3">
+                <div className="border rounded overflow-auto max-h-[70vh]">
                   <BoardPreview ref={boardRef} data={formData} />
                 </div>
-                <p className="text-xs text-muted-foreground mt-2 text-center">
-                  Board Size: 1.20m x 2.00m | Minimum QR Code: 15cm x 15cm
-                </p>
               </CardContent>
             </Card>
           </div>
         </div>
       </main>
 
-      <footer className="border-t py-4 mt-8">
-        <div className="max-w-7xl mx-auto px-4 text-center text-sm text-muted-foreground">
-          <p>
-            As per Gujarat RERA Order No. 112, dated 28/11/2025
-          </p>
-          <p lang="gu" style={{ fontFamily: "'Noto Sans Gujarati', sans-serif" }}>
-            ગુજરાત રેરા હુકમ નં. ૧૧૨, તા. ૨૮/૧૧/૨૦૨૫ મુજબ
-          </p>
+      <footer className="border-t bg-card mt-8">
+        <div className="max-w-7xl mx-auto px-4 py-4">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-2 text-sm text-muted-foreground">
+            <div className="flex items-center gap-2">
+              <img 
+                src="https://bnpsca.com/public/assets/upload/images/original/686662b76f81b-Screenshot-250.png" 
+                alt="BNPS and Associates LLP" 
+                className="h-6 object-contain"
+              />
+              <span>BNPS and Associates LLP</span>
+            </div>
+            <a 
+              href="https://www.bnpsca.com" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-primary hover:underline"
+            >
+              www.bnpsca.com
+            </a>
+          </div>
         </div>
       </footer>
     </div>
