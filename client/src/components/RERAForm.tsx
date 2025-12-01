@@ -665,15 +665,24 @@ export default function RERAForm() {
                   className="overflow-auto border rounded-md"
                   style={{ maxHeight: "calc(100vh - 180px)" }}
                 >
-                  <div className="origin-top-left" style={{ transform: "scale(0.55)", transformOrigin: "top left", width: "182%" }}>
-                    <BoardPreview ref={boardRef} data={formData} />
-                  </div>
+                  <BoardPreview ref={boardRef} data={formData} />
                 </div>
               </CardContent>
             </Card>
           </div>
         </div>
       </main>
+
+      <footer className="border-t bg-card py-4 mt-8">
+        <div className="max-w-7xl mx-auto px-4 text-center space-y-1">
+          <p className="text-sm font-medium text-foreground">
+            B N P S and Associates LLP
+          </p>
+          <p className="text-sm text-muted-foreground">
+            www.bnpsca.com
+          </p>
+        </div>
+      </footer>
 
       <DownloadModal
         isOpen={showDownloadModal}
