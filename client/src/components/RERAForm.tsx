@@ -95,7 +95,7 @@ export default function RERAForm() {
 
     try {
       const canvas = await html2canvas(boardRef.current, {
-        scale: 4,
+        scale: 6,
         useCORS: true,
         backgroundColor: formData.backgroundColor === "yellow" ? "#FDE047" : "#FFFFFF",
       });
@@ -107,7 +107,7 @@ export default function RERAForm() {
 
       toast({
         title: "Download Complete",
-        description: "Board saved as PNG image.",
+        description: "Board saved as high-resolution PNG image.",
       });
     } catch (error) {
       toast({
@@ -126,27 +126,32 @@ export default function RERAForm() {
 
     try {
       const canvas = await html2canvas(boardRef.current, {
-        scale: 4,
+        scale: 6,
         useCORS: true,
         backgroundColor: formData.backgroundColor === "yellow" ? "#FDE047" : "#FFFFFF",
       });
 
       const imgData = canvas.toDataURL("image/png");
+      
+      const canvasWidth = canvas.width;
+      const canvasHeight = canvas.height;
+      const aspectRatio = canvasHeight / canvasWidth;
+      
+      const pdfWidthMM = 1200;
+      const pdfHeightMM = Math.round(pdfWidthMM * aspectRatio);
+      
       const pdf = new jsPDF({
-        orientation: "portrait",
+        orientation: pdfHeightMM > pdfWidthMM ? "portrait" : "landscape",
         unit: "mm",
-        format: [1200, 2000],
+        format: [pdfWidthMM, pdfHeightMM],
       });
 
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = pdf.internal.pageSize.getHeight();
-
-      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+      pdf.addImage(imgData, "PNG", 0, 0, pdfWidthMM, pdfHeightMM);
       pdf.save(`RERA_Board_${formData.reraRegistrationNumber || "draft"}.pdf`);
 
       toast({
         title: "Download Complete",
-        description: "Board saved as PDF document.",
+        description: "Board saved as PDF document (1.2m width).",
       });
     } catch (error) {
       toast({
