@@ -665,7 +665,17 @@ export default function RERAForm() {
                   className="overflow-auto border rounded-md"
                   style={{ maxHeight: "calc(100vh - 180px)" }}
                 >
-                  <BoardPreview ref={boardRef} data={formData} />
+                  <div style={{ 
+                    width: "640px",
+                    overflow: "hidden"
+                  }}>
+                    <div style={{ 
+                      transform: "scale(0.8)", 
+                      transformOrigin: "top left",
+                    }}>
+                      <BoardPreview ref={boardRef} data={formData} />
+                    </div>
+                  </div>
                 </div>
               </CardContent>
             </Card>
