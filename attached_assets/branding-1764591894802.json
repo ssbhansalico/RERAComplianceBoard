@@ -1,0 +1,112 @@
+{
+  "colorScheme": "light",
+  "fonts": [
+    {
+      "family": "Montserrat",
+      "role": "heading"
+    },
+    {
+      "family": "Poppins",
+      "role": "body"
+    },
+    {
+      "family": "sans-serif",
+      "role": "body"
+    }
+  ],
+  "colors": {
+    "primary": "#185888",
+    "accent": "#6C757D",
+    "background": "#FFFFFF",
+    "textPrimary": "#185888",
+    "link": "#185888"
+  },
+  "typography": {
+    "fontFamilies": {
+      "primary": "Poppins",
+      "heading": "Montserrat"
+    },
+    "fontStacks": {
+      "heading": [
+        "Poppins",
+        "sans-serif"
+      ],
+      "body": [
+        "Montserrat",
+        "sans-serif"
+      ],
+      "paragraph": [
+        "Poppins",
+        "sans-serif"
+      ]
+    },
+    "fontSizes": {
+      "h1": "70px",
+      "h2": "37.5px",
+      "body": "16.5px"
+    }
+  },
+  "spacing": {
+    "baseUnit": 4,
+    "borderRadius": "4px"
+  },
+  "components": {
+    "input": {
+      "borderColor": "#CCCCCC",
+      "borderRadius": "4px"
+    },
+    "buttonPrimary": {
+      "background": "#185888",
+      "textColor": "#FFFFFF",
+      "borderRadius": "5px",
+      "shadow": "none"
+    },
+    "buttonSecondary": {
+      "background": "#FFFFFF",
+      "textColor": "#185888",
+      "borderColor": "#FFFFFF",
+      "borderRadius": "8px",
+      "shadow": "rgba(0, 0, 0, 0.15) 0px 4px 20px 0px, rgba(255, 255, 255, 0.1) 0px 0px 40px 0px"
+    }
+  },
+  "images": {
+    "logo": "https://bnpsca.com/public/assets/upload/images/original/686662b76f81b-Screenshot-250.png",
+    "favicon": "https://bnpsca.com/public/favicon/apple-icon-57x57.png",
+    "ogImage": null
+  },
+  "__framework_hints": [
+    "bootstrap"
+  ],
+  "__llm_logo_reasoning": {
+    "selectedIndex": 0,
+    "reasoning": "The logo in the header matches the brand name 'Welcome to B N P S and Associates LLP' and is visible, making it the main brand logo.",
+    "confidence": 0.95
+  },
+  "__llm_button_reasoning": {
+    "primary": {
+      "index": 0,
+      "text": "Get Direction",
+      "reasoning": "Button #0 has a vibrant blue background (#185888) and action-oriented text 'Get Direction', making it the primary CTA."
+    },
+    "secondary": {
+      "index": 6,
+      "text": "Connect With Us",
+      "reasoning": "Button #6 has a white background (#FFFFFF) and is less prominent, making it a suitable secondary option."
+    },
+    "confidence": 0.95
+  },
+  "personality": {
+    "tone": "professional",
+    "energy": "medium",
+    "targetAudience": "Businesses and individuals seeking chartered accountancy services."
+  },
+  "designSystem": {
+    "framework": "bootstrap",
+    "componentLibrary": null
+  },
+  "confidence": {
+    "buttons": 0.95,
+    "colors": 0.9,
+    "overall": 0.925
+  }
+}
