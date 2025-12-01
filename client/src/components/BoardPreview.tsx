@@ -43,10 +43,12 @@ const BoardPreview = forwardRef<HTMLDivElement, BoardPreviewProps>(({ data }, re
   const loanAmountDisplay = data.hasLoan ? (data.loanAmount ? `₹ ${data.loanAmount}` : "વિગત ભરો") : "Not Applicable";
   const loanDateDisplay = data.hasLoan ? formatDate(data.loanDate) : "Not Applicable";
 
+  const bankNameUppercase = data.bankAccountName ? data.bankAccountName.toUpperCase() : "[BANK NAME]";
+
   return (
     <div
       ref={ref}
-      className="w-full border-4 border-gray-800 text-black"
+      className="w-full border-4 border-gray-800 text-black overflow-hidden"
       style={{
         backgroundColor: bgColor,
         fontFamily: "'Noto Sans Gujarati', 'Noto Sans', sans-serif",
@@ -61,51 +63,51 @@ const BoardPreview = forwardRef<HTMLDivElement, BoardPreviewProps>(({ data }, re
           </p>
         </div>
 
-        <div className="flex gap-4">
-          <div className="flex-1 space-y-2">
+        <div className="flex gap-3">
+          <div className="flex-1 min-w-0 space-y-2">
             <div className="flex">
-              <span className="w-[200px] font-bold text-[14px]">પ્રોજેક્ટ નું નામ:</span>
-              <span className="flex-1 text-[14px]" style={{ color: "#DC2626" }}>
+              <span className="w-[200px] flex-shrink-0 font-bold text-[14px]">પ્રોજેક્ટ નું નામ:</span>
+              <span className="flex-1 min-w-0 text-[14px] break-words" style={{ color: "#DC2626" }}>
                 {data.projectName || "વિગત ભરો / Fill Details"}
               </span>
             </div>
 
             <div className="flex">
-              <span className="w-[200px] font-bold text-[14px]">રેરા રજીસ્ટ્રેશન નંબર:</span>
-              <span className="flex-1 text-[14px]" style={{ color: "#DC2626" }}>
+              <span className="w-[200px] flex-shrink-0 font-bold text-[14px]">રેરા રજીસ્ટ્રેશન નંબર:</span>
+              <span className="flex-1 min-w-0 text-[14px] break-words" style={{ color: "#DC2626" }}>
                 {data.reraRegistrationNumber || "વિગત ભરો / Fill Details"}
               </span>
             </div>
 
             <div className="flex">
-              <span className="w-[200px] font-bold text-[14px]">પ્રમોટરનું નામ:</span>
-              <span className="flex-1 text-[14px]" style={{ color: "#DC2626" }}>
+              <span className="w-[200px] flex-shrink-0 font-bold text-[14px]">પ્રમોટરનું નામ:</span>
+              <span className="flex-1 min-w-0 text-[14px] break-words" style={{ color: "#DC2626" }}>
                 {data.promoterName || "વિગત ભરો / Fill Details"}
               </span>
             </div>
 
             <div className="flex">
-              <span className="w-[200px] font-bold text-[14px]">પ્રમોટરનો અધિક્રુત ઇ-મેઇલ આઇ.ડી.:</span>
-              <span className="flex-1 text-[14px]" style={{ color: "#DC2626" }}>
+              <span className="w-[200px] flex-shrink-0 font-bold text-[14px]">પ્રમોટરનો અધિક્રુત ઇ-મેઇલ આઇ.ડી.:</span>
+              <span className="flex-1 min-w-0 text-[14px] break-words" style={{ color: "#DC2626" }}>
                 {data.authorizedEmail || "વિગત ભરો / Fill Details"}
               </span>
             </div>
 
             <div className="flex">
-              <span className="w-[200px] font-bold text-[14px]">પ્રમોટરનો અધિક્રુત મોબાઈલ નંબર:</span>
-              <span className="flex-1 text-[14px]" style={{ color: "#DC2626" }}>
+              <span className="w-[200px] flex-shrink-0 font-bold text-[14px]">પ્રમોટરનો અધિક્રુત મોબાઈલ નંબર:</span>
+              <span className="flex-1 min-w-0 text-[14px] break-words" style={{ color: "#DC2626" }}>
                 {data.authorizedMobile || "વિગત ભરો / Fill Details"}
               </span>
             </div>
 
             <div className="flex">
-              <span className="w-[200px] font-bold text-[14px]">ઑથોરાઇઝ્ડ સીગ્નેટરી વ્યકિતનું નામ:</span>
-              <span className="flex-1 text-[14px]" style={{ color: "#DC2626" }}>
+              <span className="w-[200px] flex-shrink-0 font-bold text-[14px]">ઑથોરાઇઝ્ડ સીગ્નેટરી વ્યકિતનું નામ:</span>
+              <span className="flex-1 min-w-0 text-[14px] break-words" style={{ color: "#DC2626" }}>
                 {data.authorizedPersonName || "વિગત ભરો / Fill Details"}
               </span>
             </div>
 
-            <div className="flex gap-6">
+            <div className="flex flex-wrap gap-x-6 gap-y-1">
               <div className="flex">
                 <span className="font-bold text-[14px] mr-2">પ્રોજેક્ટ પૂર્ણ થવાની તારીખ:</span>
                 <span className="text-[14px]" style={{ color: "#DC2626" }}>
@@ -121,28 +123,31 @@ const BoardPreview = forwardRef<HTMLDivElement, BoardPreviewProps>(({ data }, re
             </div>
           </div>
 
-          <div className="w-[140px] flex flex-col items-center justify-start">
-            <div className="text-center w-full mb-2 border-2 border-gray-500 p-2 bg-white/50">
-              <p className="text-[12px] font-bold">ગુજરાત રેરાની અધિકૃત વેબ સાઈટ:</p>
-              <p className="text-[12px] font-bold" style={{ color: "#DC2626" }}>
-                https://gujrera.gujarat.gov.in
+          <div className="w-[130px] flex-shrink-0 flex flex-col items-center justify-start">
+            <div className="text-center w-full mb-2 border-2 border-gray-500 p-1.5 bg-white/50">
+              <p className="text-[10px] font-bold leading-tight">ગુજરાત રેરાની અધિકૃત વેબ સાઈટ:</p>
+              <p className="text-[9px] font-bold leading-tight" style={{ color: "#DC2626" }}>
+                https://gujrera.
+              </p>
+              <p className="text-[9px] font-bold leading-tight" style={{ color: "#DC2626" }}>
+                gujarat.gov.in
               </p>
             </div>
             <div className="text-center mb-1">
-              <p className="text-[11px] font-bold">વેબ સાઈટ પરથી પ્રોજેક્ટ</p>
-              <p className="text-[11px]">સર્ટિફિકેટ માહિતી</p>
-              <p className="text-[11px]">મેળવવા QR Code</p>
+              <p className="text-[10px] font-bold leading-tight">વેબ સાઈટ પરથી પ્રોજેક્ટ</p>
+              <p className="text-[10px] leading-tight">સર્ટિફિકેટ માહિતી</p>
+              <p className="text-[10px] leading-tight">મેળવવા QR Code</p>
             </div>
             <div
-              className="w-[90px] h-[90px] border-2 border-gray-600 bg-white flex items-center justify-center overflow-hidden"
+              className="w-[80px] h-[80px] border-2 border-gray-600 bg-white flex items-center justify-center overflow-hidden"
             >
               {data.qrCodeImage ? (
                 <img src={data.qrCodeImage} alt="QR Code" className="w-full h-full object-contain" />
               ) : (
-                <span className="text-[10px] text-gray-500 text-center p-1">QR Code<br/>Upload Required</span>
+                <span className="text-[9px] text-gray-500 text-center p-1">QR Code<br/>Upload</span>
               )}
             </div>
-            <p className="text-[10px] mt-1">Minimum 15cm x 15cm</p>
+            <p className="text-[9px] mt-0.5">Min. 15cm x 15cm</p>
           </div>
         </div>
 
@@ -193,29 +198,29 @@ const BoardPreview = forwardRef<HTMLDivElement, BoardPreviewProps>(({ data }, re
         <div className="mt-3 space-y-2">
           <div className="border-2 border-gray-600 p-2">
             <p className="text-[13px] font-bold mb-1">પ્રોજેક્ટના સ્પેસિફિકેશનની વિગતો:</p>
-            <p className="text-[12px]" style={{ color: "#DC2626" }}>
+            <p className="text-[12px] break-words" style={{ color: "#DC2626" }}>
               {data.specifications || "વિગત ભરો / Fill Details"}
             </p>
           </div>
 
           <div className="border-2 border-gray-600 p-2">
             <p className="text-[13px] font-bold mb-1">પ્રોજેક્ટની એમેનિટીઝની વિગતો:</p>
-            <p className="text-[12px]" style={{ color: "#DC2626" }}>
+            <p className="text-[12px] break-words" style={{ color: "#DC2626" }}>
               {data.amenities || "વિગત ભરો / Fill Details"}
             </p>
           </div>
         </div>
 
         <div className="mt-3 border-2 border-gray-600 p-2 space-y-1.5">
-          <div className="flex">
-            <span className="w-[240px] text-[13px] font-bold">પ્રોજેક્ટ ના રેરા કલેક્શન બેંક એકાઉન્ટ નામ:</span>
-            <span className="flex-1 text-[13px]" style={{ color: "#DC2626" }}>
+          <div className="flex flex-wrap">
+            <span className="w-[240px] flex-shrink-0 text-[13px] font-bold">પ્રોજેક્ટ ના રેરા કલેક્શન બેંક એકાઉન્ટ નામ:</span>
+            <span className="flex-1 min-w-0 text-[13px] break-words" style={{ color: "#DC2626" }}>
               {data.bankAccountName || "વિગત ભરો / Fill Details"}
             </span>
           </div>
-          <div className="flex">
-            <span className="w-[240px] text-[13px] font-bold">પ્રોજેક્ટ ના રેરા કલેક્શન બેંક એકાઉન્ટ નંબર:</span>
-            <span className="flex-1 text-[13px]" style={{ color: "#DC2626" }}>
+          <div className="flex flex-wrap">
+            <span className="w-[240px] flex-shrink-0 text-[13px] font-bold">પ્રોજેક્ટ ના રેરા કલેક્શન બેંક એકાઉન્ટ નંબર:</span>
+            <span className="text-[13px]" style={{ color: "#DC2626" }}>
               {maskedAccountNumber || "***********XXXX"}
             </span>
             <span className="text-[11px] text-gray-600 ml-2">(ના નંબર છેલ્લા ૪ અંક જ દર્શાવો)</span>
@@ -226,13 +231,13 @@ const BoardPreview = forwardRef<HTMLDivElement, BoardPreviewProps>(({ data }, re
           <p className="text-[13px] font-bold border-b border-gray-400 pb-1 mb-2">
             પ્રોજેક્ટ લોનની વિગતો
           </p>
-          <div className="flex mb-1">
-            <span className="w-[280px] text-[13px] font-bold">પ્રોજેક્ટ લોન આપનાર બેંક / નાણા સંસ્થાનું નામ:</span>
-            <span className="flex-1 text-[13px]" style={{ color: "#DC2626" }}>
+          <div className="flex flex-wrap mb-1">
+            <span className="w-[280px] flex-shrink-0 text-[13px] font-bold">પ્રોજેક્ટ લોન આપનાર બેંક / નાણા સંસ્થાનું નામ:</span>
+            <span className="flex-1 min-w-0 text-[13px] break-words" style={{ color: "#DC2626" }}>
               {loanBankDisplay}
             </span>
           </div>
-          <div className="flex gap-8">
+          <div className="flex flex-wrap gap-x-8 gap-y-1">
             <div className="flex">
               <span className="text-[13px] font-bold mr-2">પ્રોજેક્ટ લોનની રકમ:</span>
               <span className="text-[13px]" style={{ color: "#DC2626" }}>
@@ -254,7 +259,7 @@ const BoardPreview = forwardRef<HTMLDivElement, BoardPreviewProps>(({ data }, re
             <li>
               આ પ્રોજેક્ટમાં બુકીંગ કરાવનાર વ્યકિતએ બુકીંગ પેટે આપવાના થતા નાણા{" "}
               <span style={{ color: "#DC2626" }} className="font-bold">
-                "{data.bankAccountName || "[Bank Name]"}"
+                "{bankNameUppercase}"
               </span>{" "}
               ના નામના ચેકથી જ આપવાના રહેશે.
             </li>
