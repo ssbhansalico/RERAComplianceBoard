@@ -88,7 +88,21 @@ export default function RERAForm() {
 
   const saveGenerationMutation = useMutation({
     mutationFn: async (data: { userId: string; boardData: BoardData; downloadType: string }) => {
-      const response = await apiRequest("POST", "/api/generations", data);
+      const serializedBoardData = {
+        ...data.boardData,
+        blocks: data.boardData.blocks.map(block => ({
+          id: block.id,
+          blockName: block.blockName,
+          shops: block.shops,
+          offices: block.offices,
+          residential: block.residential,
+        })),
+      };
+      const response = await apiRequest("POST", "/api/generations", {
+        userId: data.userId,
+        boardData: serializedBoardData,
+        downloadType: data.downloadType,
+      });
       return response.json();
     },
     onSuccess: () => {
@@ -228,9 +242,16 @@ export default function RERAForm() {
     setShowAuthModal(false);
   };
 
+  if (!currentUser) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <AuthModal isOpen={true} onAuthenticated={handleAuthenticated} />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background">
-      <AuthModal isOpen={showAuthModal} onAuthenticated={handleAuthenticated} />
       
       <header className="border-b bg-card sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-3">
