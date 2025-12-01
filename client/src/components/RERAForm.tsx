@@ -274,7 +274,7 @@ export default function RERAForm() {
                   <div className="space-y-1.5">
                     <BilingualLabel
                       english="Promoter's Authorized Email ID"
-                      gujarati="પ્રમોટરનું અધિકૃત email ઈ.ડી."
+                      gujarati="પ્રમોટરનો અધિક્રુત ઇ-મેઇલ આઇ.ડી."
                       htmlFor="authorizedEmail"
                       required
                     />
@@ -291,7 +291,7 @@ export default function RERAForm() {
                   <div className="space-y-1.5">
                     <BilingualLabel
                       english="Promoter's Authorized Mobile Number"
-                      gujarati="પ્રમોટરનું અધિકૃત મોબાઈલ નંબર"
+                      gujarati="પ્રમોટરનો અધિક્રુત મોબાઈલ નંબર"
                       htmlFor="authorizedMobile"
                       required
                     />
@@ -307,8 +307,8 @@ export default function RERAForm() {
 
                   <div className="space-y-1.5">
                     <BilingualLabel
-                      english="Authorized Person Name"
-                      gujarati="પ્રોજેક્ટ ઓથોરાઈઝડ વ્યક્તિનું નામ"
+                      english="Authorized Signatory Person Name"
+                      gujarati="ઑથોરાઇઝ્ડ સીગ્નેટરી વ્યકિતનું નામ"
                       htmlFor="authorizedPerson"
                       required
                     />
@@ -324,8 +324,8 @@ export default function RERAForm() {
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div className="space-y-1.5">
                       <BilingualLabel
-                        english="Project Type"
-                        gujarati="પ્રોજેક્ટ પ્રકાર"
+                        english="Project Construction Usage"
+                        gujarati="પ્રોજેક્ટના બાંધકામનો ઉપયોગ"
                         htmlFor="projectType"
                         required
                       />
@@ -496,8 +496,8 @@ export default function RERAForm() {
                     <div className="space-y-4 pt-2 border-t">
                       <div className="space-y-1.5">
                         <BilingualLabel
-                          english="Bank / Financial Institution Name"
-                          gujarati="બેંક / ફાયનાન્સ સંસ્થાનું નામ"
+                          english="Loan Provider Bank / Financial Institution Name"
+                          gujarati="પ્રોજેક્ટ લોન આપનાર બેંક / નાણા સંસ્થાનું નામ"
                           htmlFor="loanBankName"
                         />
                         <Input
@@ -513,7 +513,7 @@ export default function RERAForm() {
                         <div className="space-y-1.5">
                           <BilingualLabel
                             english="Loan Amount"
-                            gujarati="લોનની રકમ"
+                            gujarati="પ્રોજેક્ટ લોનની રકમ"
                             htmlFor="loanAmount"
                           />
                           <Input
@@ -527,8 +527,8 @@ export default function RERAForm() {
 
                         <div className="space-y-1.5">
                           <BilingualLabel
-                            english="Loan Sanctioned Date"
-                            gujarati="લોન મંજૂરી તારીખ"
+                            english="Loan Taken Date"
+                            gujarati="પ્રોજેક્ટ લોન લીધા તારીખ"
                             htmlFor="loanDate"
                           />
                           <Input
