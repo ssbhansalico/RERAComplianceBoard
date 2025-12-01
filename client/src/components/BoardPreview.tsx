@@ -297,17 +297,6 @@ const BoardPreview = forwardRef<HTMLDivElement, BoardPreviewProps>(({ data }, re
           </ol>
         </div>
 
-        <div className="mt-4 pt-2 border-t border-gray-400 text-center space-y-1">
-          <p className="text-[10px] text-gray-700 font-medium">
-            B N P S and Associates LLP
-          </p>
-          <p className="text-[10px] text-gray-600">
-            www.bnpsca.com
-          </p>
-          <p className="text-[8px] text-gray-500 mt-1">
-            This tool is provided for convenience only. Verification against GujRERA Order No. 112 is the user's responsibility.
-          </p>
-        </div>
       </div>
     </div>
   );
