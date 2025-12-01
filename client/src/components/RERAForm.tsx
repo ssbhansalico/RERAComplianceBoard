@@ -129,16 +129,42 @@ export default function RERAForm() {
     setShowDownloadModal(true);
   };
 
+  const captureBoard = async (): Promise<HTMLCanvasElement | null> => {
+    if (!boardRef.current) return null;
+    
+    const container = document.createElement("div");
+    container.style.position = "absolute";
+    container.style.left = "-9999px";
+    container.style.top = "0";
+    document.body.appendChild(container);
+    
+    const clonedBoard = boardRef.current.cloneNode(true) as HTMLElement;
+    clonedBoard.style.transform = "none";
+    clonedBoard.style.width = "800px";
+    container.appendChild(clonedBoard);
+    
+    await new Promise(resolve => setTimeout(resolve, 100));
+    
+    try {
+      const canvas = await html2canvas(clonedBoard, {
+        scale: 6,
+        useCORS: true,
+        backgroundColor: formData.backgroundColor === "yellow" ? "#FDE047" : "#FFFFFF",
+        logging: false,
+      });
+      return canvas;
+    } finally {
+      document.body.removeChild(container);
+    }
+  };
+
   const downloadAsPNG = async (userId: string) => {
     if (!boardRef.current) return;
     setIsGenerating(true);
 
     try {
-      const canvas = await html2canvas(boardRef.current, {
-        scale: 6,
-        useCORS: true,
-        backgroundColor: formData.backgroundColor === "yellow" ? "#FDE047" : "#FFFFFF",
-      });
+      const canvas = await captureBoard();
+      if (!canvas) throw new Error("Failed to capture board");
 
       const link = document.createElement("a");
       link.download = `RERA_Board_${formData.reraRegistrationNumber || "draft"}.png`;
@@ -171,11 +197,8 @@ export default function RERAForm() {
     setIsGenerating(true);
 
     try {
-      const canvas = await html2canvas(boardRef.current, {
-        scale: 6,
-        useCORS: true,
-        backgroundColor: formData.backgroundColor === "yellow" ? "#FDE047" : "#FFFFFF",
-      });
+      const canvas = await captureBoard();
+      if (!canvas) throw new Error("Failed to capture board");
 
       const imgData = canvas.toDataURL("image/png");
       
@@ -642,7 +665,7 @@ export default function RERAForm() {
                   className="overflow-auto border rounded-md"
                   style={{ maxHeight: "calc(100vh - 180px)" }}
                 >
-                  <div className="origin-top-left" style={{ transform: "scale(0.5)", transformOrigin: "top left", width: "200%" }}>
+                  <div className="origin-top-left" style={{ transform: "scale(0.55)", transformOrigin: "top left", width: "182%" }}>
                     <BoardPreview ref={boardRef} data={formData} />
                   </div>
                 </div>
