@@ -273,8 +273,42 @@ export default function RERAForm() {
 
                   <div className="space-y-1.5">
                     <BilingualLabel
+                      english="Promoter's Authorized Email ID"
+                      gujarati="પ્રમોટરનું અધિકૃત email ઈ.ડી."
+                      htmlFor="authorizedEmail"
+                      required
+                    />
+                    <Input
+                      id="authorizedEmail"
+                      type="email"
+                      value={formData.authorizedEmail}
+                      onChange={(e) => updateField("authorizedEmail", e.target.value)}
+                      placeholder="email@example.com"
+                      data-testid="input-authorized-email"
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <BilingualLabel
+                      english="Promoter's Authorized Mobile Number"
+                      gujarati="પ્રમોટરનું અધિકૃત મોબાઈલ નંબર"
+                      htmlFor="authorizedMobile"
+                      required
+                    />
+                    <Input
+                      id="authorizedMobile"
+                      type="tel"
+                      value={formData.authorizedMobile}
+                      onChange={(e) => updateField("authorizedMobile", e.target.value)}
+                      placeholder="+91 9876543210"
+                      data-testid="input-authorized-mobile"
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <BilingualLabel
                       english="Authorized Person Name"
-                      gujarati="અધિકૃત વ્યક્તિનું નામ"
+                      gujarati="પ્રોજેક્ટ ઓથોરાઈઝડ વ્યક્તિનું નામ"
                       htmlFor="authorizedPerson"
                       required
                     />
@@ -285,42 +319,6 @@ export default function RERAForm() {
                       placeholder="Enter authorized person's full name"
                       data-testid="input-authorized-person"
                     />
-                  </div>
-
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    <div className="space-y-1.5">
-                      <BilingualLabel
-                        english="Authorized Email ID"
-                        gujarati="અધિકૃત ઈ-મેલ આઈ.ડી."
-                        htmlFor="authorizedEmail"
-                        required
-                      />
-                      <Input
-                        id="authorizedEmail"
-                        type="email"
-                        value={formData.authorizedEmail}
-                        onChange={(e) => updateField("authorizedEmail", e.target.value)}
-                        placeholder="email@example.com"
-                        data-testid="input-authorized-email"
-                      />
-                    </div>
-
-                    <div className="space-y-1.5">
-                      <BilingualLabel
-                        english="Authorized Mobile Number"
-                        gujarati="અધિકૃત મોબાઈલ નંબર"
-                        htmlFor="authorizedMobile"
-                        required
-                      />
-                      <Input
-                        id="authorizedMobile"
-                        type="tel"
-                        value={formData.authorizedMobile}
-                        onChange={(e) => updateField("authorizedMobile", e.target.value)}
-                        placeholder="+91 9876543210"
-                        data-testid="input-authorized-mobile"
-                      />
-                    </div>
                   </div>
 
                   <div className="grid sm:grid-cols-2 gap-4">
