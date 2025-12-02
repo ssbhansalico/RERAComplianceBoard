@@ -166,7 +166,6 @@ const BoardPreview = forwardRef<HTMLDivElement, BoardPreviewProps>(({ data }, re
                 </div>
               )}
             </div>
-            <p className="text-[11px] mt-1 font-medium text-gray-600">22.5cm x 22.5cm</p>
           </div>
         </div>
 
