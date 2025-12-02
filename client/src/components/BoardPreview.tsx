@@ -59,8 +59,8 @@ const BoardPreview = forwardRef<HTMLDivElement, BoardPreviewProps>(({ data }, re
     >
       <div className="p-6">
         <div className="text-center mb-5 pb-4 border-b-2 border-gray-600">
-          <p className="text-[28px] font-bold">
-            ગુજરાત રી.એ. ઓથોરીટી હુકમ - ક્ર.૧૧૨, તા.૨૮.૧૧.૨૦૨૫ ના અધિન
+          <p className="text-[22px] font-bold">
+            ગુજરાત રીયલ એસ્ટેટ રેગ્યુલેટરી ઓથોરીટીના હુકમ નં.૧૧૨, તા.૨૮.૧૧.૨૦૨૫ ને આધિન
           </p>
         </div>
 
@@ -126,11 +126,11 @@ const BoardPreview = forwardRef<HTMLDivElement, BoardPreviewProps>(({ data }, re
 
           <div className="flex-shrink-0 flex flex-col items-center justify-start" style={{ width: "18.75%" }}>
             <div className="text-center w-full mb-2 border-2 border-gray-600 p-2 bg-white/50">
-              <p className="text-[14px] font-bold leading-tight mb-1">ગુજરાત રેરાની અધિકૃત વેબ સાઈટ:</p>
-              <p className="text-[14px] font-bold leading-tight" style={{ color: "#DC2626" }}>
+              <p className="text-[15px] font-bold leading-tight mb-1">ગુજરાત રેરાની અધિકૃત વેબ સાઈટ:</p>
+              <p className="text-[15px] font-bold leading-tight" style={{ color: "#DC2626" }}>
                 https://gujrera.
               </p>
-              <p className="text-[14px] font-bold leading-tight" style={{ color: "#DC2626" }}>
+              <p className="text-[15px] font-bold leading-tight" style={{ color: "#DC2626" }}>
                 gujarat.gov.in
               </p>
             </div>
@@ -179,33 +179,33 @@ const BoardPreview = forwardRef<HTMLDivElement, BoardPreviewProps>(({ data }, re
           <table className="w-full text-[22px]">
             <thead>
               <tr className="border-b-2 border-gray-600 bg-gray-100">
-                <th className="border-r-2 border-gray-600 p-2.5 text-left font-bold">બ્લોક નંબર</th>
-                <th className="border-r-2 border-gray-600 p-2.5 text-center font-bold">દુકાનની સંખ્યા</th>
-                <th className="border-r-2 border-gray-600 p-2.5 text-center font-bold">ઓફીસની સંખ્યા</th>
-                <th className="p-2.5 text-center font-bold">રહેઠાણની સંખ્યા</th>
+                <th className="border-r-2 border-gray-600 p-2.5 text-left font-bold align-middle">બ્લોક નંબર</th>
+                <th className="border-r-2 border-gray-600 p-2.5 text-center font-bold align-middle">દુકાનની સંખ્યા</th>
+                <th className="border-r-2 border-gray-600 p-2.5 text-center font-bold align-middle">ઓફીસની સંખ્યા</th>
+                <th className="p-2.5 text-center font-bold align-middle">રહેઠાણની સંખ્યા</th>
               </tr>
             </thead>
             <tbody>
               {data.blocks.length > 0 ? (
                 data.blocks.map((block, index) => (
                   <tr key={block.id} className={index < data.blocks.length - 1 ? "border-b border-gray-400" : ""}>
-                    <td className="border-r-2 border-gray-600 p-2.5" style={{ color: "#DC2626" }}>
+                    <td className="border-r-2 border-gray-600 p-2.5 align-middle" style={{ color: "#DC2626" }}>
                       {block.blockName || "-"}
                     </td>
-                    <td className="border-r-2 border-gray-600 p-2.5 text-center" style={{ color: "#DC2626" }}>
+                    <td className="border-r-2 border-gray-600 p-2.5 text-center align-middle" style={{ color: "#DC2626" }}>
                       {block.shops || "0"}
                     </td>
-                    <td className="border-r-2 border-gray-600 p-2.5 text-center" style={{ color: "#DC2626" }}>
+                    <td className="border-r-2 border-gray-600 p-2.5 text-center align-middle" style={{ color: "#DC2626" }}>
                       {block.offices || "0"}
                     </td>
-                    <td className="p-2.5 text-center" style={{ color: "#DC2626" }}>
+                    <td className="p-2.5 text-center align-middle" style={{ color: "#DC2626" }}>
                       {block.residential || "0"}
                     </td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan={4} className="p-3 text-center text-gray-500">
+                  <td colSpan={4} className="p-3 text-center text-gray-500 align-middle">
                     Add blocks using the form
                   </td>
                 </tr>
@@ -242,7 +242,6 @@ const BoardPreview = forwardRef<HTMLDivElement, BoardPreviewProps>(({ data }, re
             <span className="text-[24px]" style={{ color: "#DC2626" }}>
               {maskedAccountNumber || "***********XXXX"}
             </span>
-            <span className="text-[18px] text-gray-600 ml-3">(ના નંબર છેલ્લા ૪ અંક જ દર્શાવો)</span>
           </div>
         </div>
 
