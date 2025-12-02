@@ -141,29 +141,32 @@ export default function RERAForm() {
   const captureBoard = async (): Promise<HTMLCanvasElement | null> => {
     if (!boardRef.current) return null;
     
-    const container = document.createElement("div");
-    container.style.position = "absolute";
-    container.style.left = "-9999px";
-    container.style.top = "0";
-    document.body.appendChild(container);
+    const originalElement = boardRef.current;
+    const parentElement = originalElement.parentElement;
     
-    const clonedBoard = boardRef.current.cloneNode(true) as HTMLElement;
-    clonedBoard.style.transform = "none";
-    clonedBoard.style.width = "800px";
-    container.appendChild(clonedBoard);
+    if (!parentElement) return null;
     
-    await new Promise(resolve => setTimeout(resolve, 100));
+    const originalTransform = parentElement.style.transform;
+    const originalTransformOrigin = parentElement.style.transformOrigin;
+    
+    parentElement.style.transform = "none";
+    parentElement.style.transformOrigin = "top left";
+    
+    await new Promise(resolve => setTimeout(resolve, 50));
     
     try {
-      const canvas = await html2canvas(clonedBoard, {
+      const canvas = await html2canvas(originalElement, {
         scale: 6,
         useCORS: true,
         backgroundColor: formData.backgroundColor === "yellow" ? "#FDE047" : "#FFFFFF",
         logging: false,
+        width: 800,
+        windowWidth: 800,
       });
       return canvas;
     } finally {
-      document.body.removeChild(container);
+      parentElement.style.transform = originalTransform;
+      parentElement.style.transformOrigin = originalTransformOrigin;
     }
   };
 
