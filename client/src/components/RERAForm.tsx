@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
-import { Download, FileImage, RotateCcw, Users, CheckCircle, PlusCircle } from "lucide-react";
+import { Download, FileImage, RotateCcw, Users, CheckCircle, PlusCircle, FileText } from "lucide-react";
+import orderPdfPath from "@assets/Order_-_112_RERA_Information_Board_on_Project_Site_1764668717598.pdf";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -290,7 +291,22 @@ export default function RERAForm() {
             Verification of the final output against GujRERA Order No. 112 is the sole responsibility of the user.
           </p>
           
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-end gap-2">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+            <a
+              href={orderPdfPath}
+              download="GujRERA_Order_112.pdf"
+              className="inline-flex"
+            >
+              <Button
+                variant="outline"
+                size="sm"
+                className="gap-1 text-primary border-primary hover:bg-primary/10"
+                data-testid="button-download-order"
+              >
+                <FileText className="h-4 w-4" />
+                Download Order 112
+              </Button>
+            </a>
             <div className="flex gap-2 flex-wrap sm:ml-auto">
               <Button
                 variant="outline"
