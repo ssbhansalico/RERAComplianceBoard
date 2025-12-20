@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { Download, FileImage, RotateCcw, Users, CheckCircle, PlusCircle, FileText } from "lucide-react";
-import orderPdfPath from "@assets/Order_-_112_RERA_Information_Board_on_Project_Site_1764668717598.pdf";
+import orderPdfPath from "@assets/MODIFIED_ORDER_112-A_1766226702098.pdf";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -277,7 +277,7 @@ export default function RERAForm() {
                 Gujarat RERA Information Board Generator
               </h1>
               <p className="text-sm text-muted-foreground" lang="gu" style={{ fontFamily: "'Noto Sans Gujarati', sans-serif" }}>
-                ગુજરાત રેરા માહિતી બોર્ડ જનરેટર - હુકમ ક્ર.૧૧૨
+                ગુજરાત રેરા માહિતી બોર્ડ જનરેટર - હુકમ ક્ર.૧૧૨-A
               </p>
             </div>
             {usageStats && (
@@ -291,13 +291,13 @@ export default function RERAForm() {
           <p className="text-xs text-muted-foreground mb-3 leading-relaxed">
             Developed by BNPS and Associates LLP. This tool is provided for convenience and assistance only. 
             We do not assume any liability for errors, omissions, or non-compliance. 
-            Verification of the final output against GujRERA Order No. 112 is the sole responsibility of the user.
+            Verification of the final output against GujRERA Order No. 112-A is the sole responsibility of the user.
           </p>
           
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
             <a
               href={orderPdfPath}
-              download="GujRERA_Order_112.pdf"
+              download="GujRERA_Order_112-A.pdf"
               className="inline-flex"
             >
               <Button
@@ -307,7 +307,7 @@ export default function RERAForm() {
                 data-testid="button-download-order"
               >
                 <FileText className="h-4 w-4" />
-                Download Order 112
+                Download Order 112-A
               </Button>
             </a>
             <div className="flex gap-2 flex-wrap sm:ml-auto">
@@ -645,39 +645,6 @@ export default function RERAForm() {
                         />
                       </div>
 
-                      <div className="grid sm:grid-cols-2 gap-4">
-                        <div className="space-y-1.5">
-                          <BilingualLabel
-                            english="Loan Amount"
-                            gujarati="લોનની રકમ"
-                            htmlFor="loanAmount"
-                            required
-                          />
-                          <Input
-                            id="loanAmount"
-                            value={formData.loanAmount}
-                            onChange={(e) => updateField("loanAmount", e.target.value)}
-                            placeholder="e.g., 10,00,00,000"
-                            data-testid="input-loan-amount"
-                          />
-                        </div>
-
-                        <div className="space-y-1.5">
-                          <BilingualLabel
-                            english="Loan Date"
-                            gujarati="લોન લીધા તારીખ"
-                            htmlFor="loanDate"
-                            required
-                          />
-                          <Input
-                            id="loanDate"
-                            type="date"
-                            value={formData.loanDate}
-                            onChange={(e) => updateField("loanDate", e.target.value)}
-                            data-testid="input-loan-date"
-                          />
-                        </div>
-                      </div>
                     </>
                   )}
                 </AccordionContent>
