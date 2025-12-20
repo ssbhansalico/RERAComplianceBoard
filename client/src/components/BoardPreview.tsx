@@ -60,7 +60,7 @@ const BoardPreview = forwardRef<HTMLDivElement, BoardPreviewProps>(({ data }, re
       <div className="p-6">
         <div className="text-center mb-5 pb-4 border-b-2 border-gray-600">
           <p className="text-[22px] font-bold">
-            ગુજરાત રીયલ એસ્ટેટ રેગ્યુલેટરી ઓથોરીટીના હુકમ નં.૧૧૨, તા.૨૮.૧૧.૨૦૨૫ ને આધિન
+            ગુજરાત રીયલ એસ્ટેટ રેગ્યુલેટરી ઓથોરીટીના હુકમ નં.૧૧૨-A, તા.૧૯.૧૨.૨૦૨૫ ને આધિન
           </p>
         </div>
 
@@ -248,25 +248,11 @@ const BoardPreview = forwardRef<HTMLDivElement, BoardPreviewProps>(({ data }, re
           <p className="text-[24px] font-bold border-b border-gray-400 pb-2 mb-3">
             પ્રોજેક્ટ લોનની વિગતો
           </p>
-          <div className="flex flex-wrap mb-2">
+          <div className="flex flex-wrap">
             <span className="w-[420px] flex-shrink-0 text-[24px] font-bold">પ્રોજેક્ટ લોન આપનાર બેંક / નાણા સંસ્થાનું નામ:</span>
             <span className="flex-1 min-w-0 text-[24px] break-words" style={{ color: "#DC2626" }}>
               {loanBankDisplay}
             </span>
-          </div>
-          <div className="flex flex-wrap gap-x-10 gap-y-2">
-            <div className="flex">
-              <span className="text-[24px] font-bold mr-3">પ્રોજેક્ટ લોનની રકમ:</span>
-              <span className="text-[24px]" style={{ color: "#DC2626" }}>
-                {loanAmountDisplay}
-              </span>
-            </div>
-            <div className="flex">
-              <span className="text-[24px] font-bold mr-3">પ્રોજેક્ટ લોન લીધા તારીખ:</span>
-              <span className="text-[24px]" style={{ color: "#DC2626" }}>
-                {loanDateDisplay}
-              </span>
-            </div>
           </div>
         </div>
 
