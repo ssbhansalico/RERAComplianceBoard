@@ -231,13 +231,13 @@ const BoardPreview = forwardRef<HTMLDivElement, BoardPreviewProps>(({ data }, re
 
         <div className="mt-3 border-2 border-gray-600 p-3 space-y-2">
           <div className="flex flex-wrap">
-            <span className="w-[380px] flex-shrink-0 text-[24px] font-bold">પ્રોજેક્ટ ના રેરા કલેક્શન બેંક એકાઉન્ટ નામ:</span>
+            <span className="w-[380px] flex-shrink-0 text-[24px] font-bold">રેરા કલેક્શન બેંક એકાઉન્ટ નામ:</span>
             <span className="flex-1 min-w-0 text-[24px] break-words" style={{ color: "#DC2626" }}>
               {data.bankAccountName || "વિગત ભરો / Fill Details"}
             </span>
           </div>
           <div className="flex flex-wrap">
-            <span className="w-[380px] flex-shrink-0 text-[24px] font-bold">પ્રોજેક્ટ ના રેરા કલેક્શન બેંક એકાઉન્ટ નંબર:</span>
+            <span className="w-[380px] flex-shrink-0 text-[24px] font-bold">રેરા કલેક્શન બેંક એકાઉન્ટ નંબર:</span>
             <span className="text-[24px]" style={{ color: "#DC2626" }}>
               {maskedAccountNumber || "***********XXXX"}
             </span>
@@ -249,7 +249,7 @@ const BoardPreview = forwardRef<HTMLDivElement, BoardPreviewProps>(({ data }, re
             પ્રોજેક્ટ લોનની વિગતો
           </p>
           <div className="flex flex-wrap">
-            <span className="w-[420px] flex-shrink-0 text-[24px] font-bold">પ્રોજેક્ટ લોન આપનાર બેંક / નાણા સંસ્થાનું નામ:</span>
+            <span className="w-[420px] flex-shrink-0 text-[24px] font-bold">બેંક / નાણા સંસ્થાનું નામ:</span>
             <span className="flex-1 min-w-0 text-[24px] break-words" style={{ color: "#DC2626" }}>
               {loanBankDisplay}
             </span>
