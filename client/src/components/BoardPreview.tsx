@@ -54,18 +54,18 @@ const BoardPreview = forwardRef<HTMLDivElement, BoardPreviewProps>(({ data }, re
         backgroundColor: bgColor,
         fontFamily: "'Noto Sans Gujarati', 'Noto Sans', sans-serif",
         fontSize: "24px",
-        lineHeight: "1.3",
+        lineHeight: "1.25",
       }}
     >
-      <div className="p-6">
-        <div className="text-center mb-5 pb-4 border-b-2 border-gray-600">
+      <div className="p-4">
+        <div className="text-center mb-3 pb-3 border-b-2 border-gray-600">
           <p className="text-[22px] font-bold">
             ગુજરાત રીયલ એસ્ટેટ રેગ્યુલેટરી ઓથોરીટીના હુકમ નં.૧૧૨-A, તા.૧૯.૧૨.૨૦૨૫ ને આધિન
           </p>
         </div>
 
-        <div className="flex gap-5">
-          <div className="flex-1 min-w-0 space-y-3">
+        <div className="flex gap-4">
+          <div className="flex-1 min-w-0 space-y-2">
             <div className="flex">
               <span className="w-[280px] flex-shrink-0 font-bold text-[24px]">પ્રોજેક્ટ નું નામ:</span>
               <span className="flex-1 min-w-0 text-[24px] break-words" style={{ color: "#DC2626" }}>
@@ -169,8 +169,8 @@ const BoardPreview = forwardRef<HTMLDivElement, BoardPreviewProps>(({ data }, re
           </div>
         </div>
 
-        <div className="mt-5 border-2 border-gray-600">
-          <div className="text-center py-2 bg-gray-200 border-b-2 border-gray-600">
+        <div className="mt-3 border-2 border-gray-600">
+          <div className="text-center py-1.5 bg-gray-200 border-b-2 border-gray-600">
             <p className="text-[24px] font-bold">
               બ્લોક અને ઉપયોગ મુજબ યુનીટની સંખ્યા
             </p>
@@ -178,33 +178,33 @@ const BoardPreview = forwardRef<HTMLDivElement, BoardPreviewProps>(({ data }, re
           <table className="w-full text-[22px]">
             <thead>
               <tr className="border-b-2 border-gray-600 bg-gray-100">
-                <th className="border-r-2 border-gray-600 p-2.5 text-left font-bold align-middle">બ્લોક નંબર</th>
-                <th className="border-r-2 border-gray-600 p-2.5 text-center font-bold align-middle">દુકાનની સંખ્યા</th>
-                <th className="border-r-2 border-gray-600 p-2.5 text-center font-bold align-middle">ઓફીસની સંખ્યા</th>
-                <th className="p-2.5 text-center font-bold align-middle">રહેઠાણની સંખ્યા</th>
+                <th className="border-r-2 border-gray-600 p-2 text-left font-bold align-middle">બ્લોક નંબર</th>
+                <th className="border-r-2 border-gray-600 p-2 text-center font-bold align-middle">દુકાનની સંખ્યા</th>
+                <th className="border-r-2 border-gray-600 p-2 text-center font-bold align-middle">ઓફીસની સંખ્યા</th>
+                <th className="p-2 text-center font-bold align-middle">રહેઠાણની સંખ્યા</th>
               </tr>
             </thead>
             <tbody>
               {data.blocks.length > 0 ? (
                 data.blocks.map((block, index) => (
                   <tr key={block.id} className={index < data.blocks.length - 1 ? "border-b border-gray-400" : ""}>
-                    <td className="border-r-2 border-gray-600 p-2.5 align-middle" style={{ color: "#DC2626" }}>
+                    <td className="border-r-2 border-gray-600 p-2 align-middle" style={{ color: "#DC2626" }}>
                       {block.blockName || "-"}
                     </td>
-                    <td className="border-r-2 border-gray-600 p-2.5 text-center align-middle" style={{ color: "#DC2626" }}>
+                    <td className="border-r-2 border-gray-600 p-2 text-center align-middle" style={{ color: "#DC2626" }}>
                       {block.shops || "0"}
                     </td>
-                    <td className="border-r-2 border-gray-600 p-2.5 text-center align-middle" style={{ color: "#DC2626" }}>
+                    <td className="border-r-2 border-gray-600 p-2 text-center align-middle" style={{ color: "#DC2626" }}>
                       {block.offices || "0"}
                     </td>
-                    <td className="p-2.5 text-center align-middle" style={{ color: "#DC2626" }}>
+                    <td className="p-2 text-center align-middle" style={{ color: "#DC2626" }}>
                       {block.residential || "0"}
                     </td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan={4} className="p-3 text-center text-gray-500 align-middle">
+                  <td colSpan={4} className="p-2 text-center text-gray-500 align-middle">
                     Add blocks using the form
                   </td>
                 </tr>
@@ -213,23 +213,23 @@ const BoardPreview = forwardRef<HTMLDivElement, BoardPreviewProps>(({ data }, re
           </table>
         </div>
 
-        <div className="mt-5 space-y-4">
-          <div className="border-2 border-gray-600 p-4">
-            <p className="text-[24px] font-bold mb-2">પ્રોજેક્ટના સ્પેસિફિકેશનની વિગતો:</p>
+        <div className="mt-3 space-y-2">
+          <div className="border-2 border-gray-600 p-3">
+            <p className="text-[24px] font-bold mb-1">પ્રોજેક્ટના સ્પેસિફિકેશનની વિગતો:</p>
             <p className="text-[22px] break-words" style={{ color: "#DC2626" }}>
               {data.specifications || "વિગત ભરો / Fill Details"}
             </p>
           </div>
 
-          <div className="border-2 border-gray-600 p-4">
-            <p className="text-[24px] font-bold mb-2">પ્રોજેક્ટની એમેનિટીઝની વિગતો:</p>
+          <div className="border-2 border-gray-600 p-3">
+            <p className="text-[24px] font-bold mb-1">પ્રોજેક્ટની એમેનિટીઝની વિગતો:</p>
             <p className="text-[22px] break-words" style={{ color: "#DC2626" }}>
               {data.amenities || "વિગત ભરો / Fill Details"}
             </p>
           </div>
         </div>
 
-        <div className="mt-5 border-2 border-gray-600 p-4 space-y-3">
+        <div className="mt-3 border-2 border-gray-600 p-3 space-y-2">
           <div className="flex flex-wrap">
             <span className="w-[380px] flex-shrink-0 text-[24px] font-bold">પ્રોજેક્ટ ના રેરા કલેક્શન બેંક એકાઉન્ટ નામ:</span>
             <span className="flex-1 min-w-0 text-[24px] break-words" style={{ color: "#DC2626" }}>
@@ -244,8 +244,8 @@ const BoardPreview = forwardRef<HTMLDivElement, BoardPreviewProps>(({ data }, re
           </div>
         </div>
 
-        <div className="mt-5 border-2 border-gray-600 p-4">
-          <p className="text-[24px] font-bold border-b border-gray-400 pb-2 mb-3">
+        <div className="mt-3 border-2 border-gray-600 p-3">
+          <p className="text-[24px] font-bold border-b border-gray-400 pb-1.5 mb-2">
             પ્રોજેક્ટ લોનની વિગતો
           </p>
           <div className="flex flex-wrap">
@@ -256,9 +256,9 @@ const BoardPreview = forwardRef<HTMLDivElement, BoardPreviewProps>(({ data }, re
           </div>
         </div>
 
-        <div className="mt-5 border-2 border-gray-600 p-4">
-          <p className="text-[26px] font-bold mb-3 text-center border-b border-gray-400 pb-2">એલોટીઓને જાહેર સુચના</p>
-          <ol className="text-[22px] space-y-3 list-decimal pl-6">
+        <div className="mt-3 border-2 border-gray-600 p-3">
+          <p className="text-[24px] font-bold mb-2 text-center border-b border-gray-400 pb-1.5">એલોટીઓને જાહેર સુચના</p>
+          <ol className="text-[22px] space-y-2 list-decimal pl-6">
             <li>
               આ પ્રોજેક્ટમાં બુકીંગ કરાવનાર વ્યકિતએ બુકીંગ પેટે આપવાના થતા નાણા{" "}
               <span style={{ color: "#DC2626" }} className="font-bold">
