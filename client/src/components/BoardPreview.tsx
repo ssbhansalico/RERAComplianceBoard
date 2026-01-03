@@ -102,7 +102,7 @@ const BoardPreview = forwardRef<HTMLDivElement, BoardPreviewProps>(({ data }, re
             </div>
 
             <div className="flex">
-              <span className="w-[280px] flex-shrink-0 font-bold text-[24px]">ઑથોરાઇઝ્ડ સીગ્નેટરી વ્યકિતનું નામ:</span>
+              <span className="w-[280px] flex-shrink-0 font-bold text-[24px]">ઑથોરાઇઝ્ડ સીગ્નેટરીનું નામ:</span>
               <span className="flex-1 min-w-0 text-[24px] break-words" style={{ color: "#DC2626" }}>
                 {data.authorizedPersonName || "વિગત ભરો / Fill Details"}
               </span>
