@@ -156,8 +156,9 @@ export default function RERAForm() {
     
     try {
       const canvas = await html2canvas(originalElement, {
-        scale: 6,
+        scale: 2,
         useCORS: true,
+        allowTaint: false,
         backgroundColor: formData.backgroundColor === "yellow" ? "#FDE047" : "#FFFFFF",
         logging: false,
         width: 800,
