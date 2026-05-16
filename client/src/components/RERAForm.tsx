@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { Download, FileImage, RotateCcw, Users, CheckCircle, PlusCircle, FileText } from "lucide-react";
+import { Download, FileImage, RotateCcw, CheckCircle, PlusCircle, FileText } from "lucide-react";
 import orderPdfPath from "@assets/MODIFIED_ORDER_112-A_1766226702098.pdf";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
@@ -31,8 +31,6 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
-import { useQuery, useMutation } from "@tanstack/react-query";
-import { apiRequest, queryClient } from "@/lib/queryClient";
 import BilingualLabel from "./BilingualLabel";
 import QRCodeUpload from "./QRCodeUpload";
 import BlockTable, { type BlockEntry } from "./BlockTable";
@@ -47,11 +45,6 @@ export default function RERAForm() {
   const [showDownloadModal, setShowDownloadModal] = useState(false);
   const [showInstructionsModal, setShowInstructionsModal] = useState(false);
   const [pendingDownloadType, setPendingDownloadType] = useState<"PNG" | "PDF">("PNG");
-
-  const { data: usageStats } = useQuery<{ totalGenerations: number }>({
-    queryKey: ["/api/stats/usage"],
-    refetchInterval: 30000,
-  });
 
   const [formData, setFormData] = useState<BoardData>({
     reraRegistrationNumber: "",
@@ -73,30 +66,6 @@ export default function RERAForm() {
     loanDate: "",
     qrCodeImage: null,
     backgroundColor: "yellow",
-  });
-
-  const saveGenerationMutation = useMutation({
-    mutationFn: async (data: { userId: string; boardData: BoardData; downloadType: string }) => {
-      const serializedBoardData = {
-        ...data.boardData,
-        blocks: data.boardData.blocks.map(block => ({
-          id: block.id,
-          blockName: block.blockName,
-          shops: block.shops,
-          offices: block.offices,
-          residential: block.residential,
-        })),
-      };
-      const response = await apiRequest("POST", "/api/generations", {
-        userId: data.userId,
-        boardData: serializedBoardData,
-        downloadType: data.downloadType,
-      });
-      return response.json();
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/stats/usage"] });
-    },
   });
 
   const updateField = <K extends keyof BoardData>(field: K, value: BoardData[K]) => {
@@ -171,7 +140,7 @@ export default function RERAForm() {
     }
   };
 
-  const downloadAsPNG = async (userId: string) => {
+  const downloadAsPNG = async () => {
     if (!boardRef.current) return;
     setIsGenerating(true);
 
@@ -183,12 +152,6 @@ export default function RERAForm() {
       link.download = `RERA_Board_${formData.reraRegistrationNumber || "draft"}.png`;
       link.href = canvas.toDataURL("image/png");
       link.click();
-
-      saveGenerationMutation.mutate({
-        userId: userId,
-        boardData: formData,
-        downloadType: "PNG",
-      });
 
       toast({
         title: "Download Complete",
@@ -206,7 +169,7 @@ export default function RERAForm() {
     }
   };
 
-  const downloadAsPDF = async (userId: string) => {
+  const downloadAsPDF = async () => {
     if (!boardRef.current) return;
     setIsGenerating(true);
 
@@ -232,12 +195,6 @@ export default function RERAForm() {
       pdf.addImage(imgData, "PNG", 0, 0, pdfWidthMM, pdfHeightMM);
       pdf.save(`RERA_Board_${formData.reraRegistrationNumber || "draft"}.pdf`);
 
-      saveGenerationMutation.mutate({
-        userId: userId,
-        boardData: formData,
-        downloadType: "PDF",
-      });
-
       toast({
         title: "Download Complete",
         description: "Board saved as PDF document (1.2m width).",
@@ -260,11 +217,11 @@ export default function RERAForm() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleDownloadWithUserId = (userId: string) => {
+  const handleDownloadConfirmed = () => {
     if (pendingDownloadType === "PNG") {
-      downloadAsPNG(userId);
+      downloadAsPNG();
     } else {
-      downloadAsPDF(userId);
+      downloadAsPDF();
     }
   };
 
@@ -281,12 +238,6 @@ export default function RERAForm() {
                 ગુજરાત રેરા માહિતી બોર્ડ જનરેટર - હુકમ ક્ર.૧૧૨-A
               </p>
             </div>
-            {usageStats && (
-              <Badge variant="secondary" className="gap-1 hidden sm:flex">
-                <Users className="h-3 w-3" />
-                {usageStats.totalGenerations} boards generated
-              </Badge>
-            )}
           </div>
           
           <p className="text-xs text-muted-foreground mb-3 leading-relaxed">
@@ -701,7 +652,7 @@ export default function RERAForm() {
       <DownloadModal
         isOpen={showDownloadModal}
         onClose={() => setShowDownloadModal(false)}
-        onDownload={handleDownloadWithUserId}
+        onDownload={handleDownloadConfirmed}
         downloadType={pendingDownloadType}
       />
 
