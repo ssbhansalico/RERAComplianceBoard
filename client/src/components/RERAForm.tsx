@@ -470,7 +470,7 @@ export default function RERAForm() {
                       />
                       <Select
                         value={formData.projectType}
-                        onValueChange={(val) => updateField("projectType", val)}
+                        onValueChange={(val: string) => updateField("projectType", val)}
                       >
                         <SelectTrigger id="projectType" data-testid="select-project-type">
                           <SelectValue placeholder="Select project type" />
@@ -614,7 +614,7 @@ export default function RERAForm() {
                     <Label className="text-sm font-medium">Does the project have a loan?</Label>
                     <RadioGroup
                       value={formData.hasLoan ? "yes" : "no"}
-                      onValueChange={(val) => updateField("hasLoan", val === "yes")}
+                      onValueChange={(val: string) => updateField("hasLoan", val === "yes")}
                       className="flex gap-4"
                     >
                       <div className="flex items-center space-x-2">
